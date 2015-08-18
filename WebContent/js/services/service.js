@@ -2,7 +2,7 @@
  * 
  */
 
-var serviceApp = angular.module('nullP', ['ngRoute']);
+var serviceApp = angular.module('nullP', ['ngRoute'], ['uiGmapgoogle-maps'] );
 
 // Note: Providers can only be injected into config functions. Thus you could not inject $routeProvider into PhoneListCtrl. 
 serviceApp.config(['$routeProvider',
@@ -22,6 +22,14 @@ serviceApp.config(['$routeProvider',
      });
  }
 ]);
+
+serviceApp.config(['uiGmapGoogleMapApiProvider', function (GoogleMapApi) {
+	  GoogleMapApi.configure({
+//	    key: 'your api key',
+	    v: '3.17',
+	    libraries: 'weather,geometry,visualization'
+	  });
+	}])
 
 
 serviceApp.service('usuarioService', function($http, $rootScope ) {
@@ -103,8 +111,12 @@ serviceApp.run ( function($rootScope, usuarioService) {
 });
 
 
-serviceApp.controller('controller_teste', function($scope, usuarioService, $location) {
+serviceApp.controller('controller_teste', function($scope, usuarioService, $location ) {
 
+	$scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };
+	
+	$scope.teste = "esta aqui porra!!!";
+	
 	$scope.senha2_confirma = false;
 	$scope.emailValido = false;
 	$scope.formValido = true;
