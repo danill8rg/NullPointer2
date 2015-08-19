@@ -2,35 +2,24 @@
  * 
  */
 
-var serviceApp = angular.module('nullP', ['ngRoute'], ['uiGmapgoogle-maps'] );
+var serviceApp = angular.module('nullP', ['ngRoute']);
 
 // Note: Providers can only be injected into config functions. Thus you could not inject $routeProvider into PhoneListCtrl. 
 serviceApp.config(['$routeProvider',
  function($routeProvider) {
    $routeProvider.
-     when('/mapa', { templateUrl: 'mapa/mapa.html', controller: 'mapa_controller'}).
      when('/usuario/create', { templateUrl: 'usuario/create.html', controller: 'controller_teste'}).
      when('/usuario/conta', { templateUrl: 'usuario/ContaUsuario.html', controller: 'controller_teste'}).
      when('/home', { templateUrl: 'home.html', controller: 'controller_teste'}).
      when('/list', { templateUrl: 'list.html', controller: 'controller_teste'}).
      when('/create', { templateUrl: 'create.html', controller: 'controller_teste'}).
-     when('/denuncia/detalhe', { templateUrl: 'denuncia/detalhe.html', controller: 'controller_teste'}).
-     when('/mapa/index', { templateUrl: 'mapa/index.html', controller: 'controller_teste'}).
+     when('/denuncia/detalhe/:param1', { templateUrl: 'denuncia/detalhe.html', controller: 'detalheDenunciaController'}).
      when('/delete', { templateUrl: 'list.html', controller: 'controller_teste'}).
      otherwise({
        redirectTo: '/home'
      });
  }
 ]);
-
-serviceApp.config(['uiGmapGoogleMapApiProvider', function (GoogleMapApi) {
-	  GoogleMapApi.configure({
-//	    key: 'your api key',
-	    v: '3.17',
-	    libraries: 'weather,geometry,visualization'
-	  });
-	}])
-
 
 serviceApp.service('usuarioService', function($http, $rootScope ) {
   // privado
@@ -113,8 +102,6 @@ serviceApp.run ( function($rootScope, usuarioService) {
 
 serviceApp.controller('controller_teste', function($scope, usuarioService, $location ) {
 
-	$scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };
-	
 	$scope.teste = "esta aqui porra!!!";
 	
 	$scope.senha2_confirma = false;
@@ -167,32 +154,25 @@ serviceApp.controller('controller_teste', function($scope, usuarioService, $loca
 	
 });
 
+serviceApp.controller('detalheDenunciaController', function($scope, $routeParams, $http) {
+	var param1 = $routeParams.param1;
 
-serviceApp.controller('mapa_controller'['$scope', function($scope) {
-    $scope.number = 0;
-    $scope.map = {
-        center: {
-            latitude: 35.027469,
-            longitude: -111.022753
-        },
-        zoom: 4,
-        marker: {
-            id:0,
-            coords: {
-                latitude: 35.027469,
-                longitude: -111.022753
-            },
-            options: {
-                icon: {
-                    anchor: new google.maps.Point(36,36),
-                    origin: new google.maps.Point(0,0),
-                    scaledSize: new google.maps.Size(72,72),
-                    url: 'assets/images/cluster1.png'
-                }
-            }
-        }
-    };
-    $scope.click = function() {
-        $scope.number += 1;
-    }
-}]);
+	if(param1 != null){
+		 $http.get("http://localhost:8080/NullServer/denuncia/" + param1).success(function (data) {
+			 console.log("data = " + data.tipoDenuncia);
+			 $scope.tipoDenuncia = data.tipoDenuncia;
+			 $scope.observacao = data.observacao;
+			 $scope.dataDenuncia = data.dataDenuncia;
+			 var lisImagem = data.listImagem;
+			 console.log("data.listImagem = " + data.listImagem);
+			 var i = 0;
+			 for (i = 0; i < lisImagem.length; i++) { 
+				 console.log("lisImagem.caminho = " + lisImagem[i].caminho);
+				 $scope.caminhoImagem = lisImagem[i].caminho;
+			 }
+ 	      });            
+	}else{
+		console.log("param1 iqual a nullo");
+	}
+	$scope.teste = "detalheDenunciaController!!!";	
+});

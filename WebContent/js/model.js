@@ -7,4 +7,3 @@ this.nome = username;
 this.email = email;
 this.senha = senha;
 }
-

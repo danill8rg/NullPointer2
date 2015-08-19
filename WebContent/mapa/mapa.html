@@ -70,7 +70,7 @@
 
 </head>
 
-<body ng-controller="ExampleController" >
+<body ng-controller="mapCtrl" >
  <div class="container theme-showcase">
     
 <!-- Header Starts -->
@@ -80,7 +80,7 @@
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
     <!-- Logo Starts -->
-       <a href="#/home"><h4>NullPointer</h4></a>
+       <a href="/NullPointer2/#/home"><h4>NullPointer</h4></a>
     <!-- #Logo Ends -->
     
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -94,18 +94,32 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li><a href="#/usuario/create">Novo Usuário</a></li>
-      	<li><a href="#/mapa/index">Mapa Denuncias</a></li>
+        <li><a href="/NullPointer2/#/usuario/create">Novo Usuário</a></li>
+      	<li><a href="/NullPointer2/mapa/mapa.html">Mapa Denuncias</a></li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
   </div>
-<!--  </nav>  -->
-
 <!-- #Header Starts -->
     <!-- AQUI são carregadas as views -->
    <ui-gmap-google-map center='map.center' zoom='map.zoom'>
-   		<ui-gmap-marker ng-repeat="m in map.markers" coords="m.coords" icon="m.icon" idkey="m.id"></ui-gmap-marker>
+   		
+ 			<ui-gmap-marker ng-repeat="m in map.markers" icon="m.icon" coords="m.coords" 
+ 				click="map.onMarkerClick(m)" idkey="m.id"  events="markersEvents" >
+                <ui-gmap-window show="m.show" ng-cloak>
+                    <p>
+                        Latitude: {{m.coords.latitude}}<br/>
+                        Longitude: {{m.coords.longitude}}<br/>
+                        Last signal: <strong>{{m.lastSignal}}</strong><br/>
+                        <br/>
+                        <a href="/NullPointer2/#/denuncia/detalhe/{{m.id}}">Detalhes Denuncia</a>
+                    </p>
+                    <p>
+                    	
+                    </p>
+                </ui-gmap-window>
+            </ui-gmap-marker>
+
    </ui-gmap-google-map>
   </div>
 </body>
