@@ -182,7 +182,7 @@ serviceApp.controller("GenericChartCtrl", function ($scope , $routeParams, $http
 	//$http.get("http://localhost:8080/NullServer/viewMap/quantidade").success(function (data) {
 	$http({
 	    method: 'GET', // support GET, POST, PUT, DELETE
-	    url: 'http://localhost:8080/NullServer/viewMap/quantidade',
+	    url: 'http://rcisistemas.minivps.info:8080/NullServer/viewMap/quantidade',
 	    params: data, // GET method query string
 	    data: data,
 	    headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
