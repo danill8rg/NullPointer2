@@ -25,7 +25,7 @@ angular.module("angular-google-maps-example", ['uiGmapgoogle-maps'])
                           var listaDenuncia = [];
                           $scope.link = "http://www.w3schools.com/html/";
                           
-                          $http.get("http://localhost:8080/NullServer/viewMap").success(function (data) {
+                          $http.get("http://rcisistemas.minivps.info:8080/NullServer/viewMap").success(function (data) {
                         	  for (i = 0; i < data.length; i++) { 
                         		  console.log(data[i].idDenuncia);
                         		  console.log(parseFloat(data[i].latitude));

@@ -2,7 +2,7 @@
  * 
  */
 
-var serviceApp = angular.module('nullP', ['ngRoute']);
+var serviceApp = angular.module('nullP', ['ngRoute', 'googlechart']);
 
 // Note: Providers can only be injected into config functions. Thus you could not inject $routeProvider into PhoneListCtrl. 
 serviceApp.config(['$routeProvider',
@@ -15,6 +15,8 @@ serviceApp.config(['$routeProvider',
      when('/create', { templateUrl: 'create.html', controller: 'controller_teste'}).
      when('/denuncia/detalhe/:param1', { templateUrl: 'denuncia/detalhe.html', controller: 'detalheDenunciaController'}).
      when('/delete', { templateUrl: 'list.html', controller: 'controller_teste'}).
+     when('/grafico', { templateUrl: 'grafico/grafico.html', controller: 'GenericChartCtrl'}).
+     
      otherwise({
        redirectTo: '/home'
      });
@@ -42,7 +44,7 @@ serviceApp.service('usuarioService', function($http, $rootScope ) {
 			  "email": email
 	  };
 	  
-	  var promise_post = $http.post('http://localhost:8080/NullServer/usuario/addUser', {usuario:data});
+	  var promise_post = $http.post('http://rcisistemas.minivps.info:8080/NullServer/usuario/addUser', {usuario:data});
 	  
 	  promise_post.success(function(data, status, headers, config) {
 		  console.log("data = " + data);
@@ -68,7 +70,7 @@ serviceApp.service('usuarioService', function($http, $rootScope ) {
 //	  return listaUsuarios;
 //  };
   
-  var promise = $http.get("http://localhost:8080/NullServer/usuario/all");  
+  var promise = $http.get("http://rcisistemas.minivps.info:8080/NullServer/usuario/all");  
   promise.success(function(value) {  
      console.log(value);
      for (i = 0; i < value.length; i++) { 
@@ -81,10 +83,7 @@ serviceApp.service('usuarioService', function($http, $rootScope ) {
   });
   
   this.validarEmail = function(email) {
-	  console.log("era para ter iniciado validar email funcao site:");
-	  console.log("http://localhost:8080/NullServer/usuario/validaremail/" + email);
-	  
-	  return $http.get("http://localhost:8080/NullServer/usuario/validaremail/" + email);  
+	  return $http.get("http://rcisistemas.minivps.info:8080/NullServer/usuario/validaremail/" + email);  
   };
   
 });
@@ -158,7 +157,7 @@ serviceApp.controller('detalheDenunciaController', function($scope, $routeParams
 	var param1 = $routeParams.param1;
 
 	if(param1 != null){
-		 $http.get("http://localhost:8080/NullServer/denuncia/" + param1).success(function (data) {
+		 $http.get("http://rcisistemas.minivps.info:8080/NullServer/denuncia/" + param1).success(function (data) {
 			 console.log("data = " + data.tipoDenuncia);
 			 $scope.tipoDenuncia = data.tipoDenuncia;
 			 $scope.observacao = data.observacao;
@@ -175,4 +174,73 @@ serviceApp.controller('detalheDenunciaController', function($scope, $routeParams
 		console.log("param1 iqual a nullo");
 	}
 	$scope.teste = "detalheDenunciaController!!!";	
+});
+
+serviceApp.controller("GenericChartCtrl", function ($scope , $routeParams, $http) {
+	var data = "";
+	//$http.get("http://rcisistemas.minivps.info:8080/NullServer/viewMap/quantidade").success(function (data) {
+	//$http.get("http://localhost:8080/NullServer/viewMap/quantidade").success(function (data) {
+	$http({
+	    method: 'GET', // support GET, POST, PUT, DELETE
+	    url: 'http://localhost:8080/NullServer/viewMap/quantidade',
+	    params: data, // GET method query string
+	    data: data,
+	    headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+	    timeout: 30000, // timeout abort AJAX
+	    cache: false
+	}).success(function (data) {	
+	console.log("data = " + data);
+		 var row_aux = [];
+		 for (var i = 0; i < data.length; i++) {
+			    var object = data[i];
+			    row_aux.push({"c":[{ "v": object.tipo }, { "v": object.qtde , }] });
+			}
+		 
+		 var col_aux = [	{
+				"id": "denuncia",
+				"label": "Denuncia",
+				"type": "string",
+	            "p": {}
+			}, 
+			{
+				 "id": "qtd-id",
+	               "label": "Quantidade",
+	               "type": "number",
+	               "p": {}
+			}]; 
+//var row_aux = [	
+//        	{ "c": [{ "v": "Drogas" }, { "v": 20, }]},
+//        	{ "c": [{ "v": "Assalto" }, { "v": 30, }]},
+//        	{ "c": [{ "v": "Alcool" }, { "v": 50, }]}
+//       ]; 
+
+var data = 	{
+				"cols": col_aux,
+				"rows": row_aux
+	       	}
+
+$scope.chart = {
+		  "type": "ColumnChart",
+		  "cssStyle": "height:200px; width:300px;",
+		  "data": data,
+		  "options": {
+		    "title": "Denuncias por tipo",
+		    "isStacked": "true",
+		    "fill": 20,
+		    "displayExactValues": true,
+		    "vAxis": {
+		      "title": "Quantidade",
+		      "gridlines": {
+		        "count": 5
+		      }
+		    },
+		    "hAxis": {
+		      "title": "Tipo de Denuncia"
+		    }
+		  },
+		  "formatters": {},
+		  "displayed": true
+		}
+      });
+    
 });
