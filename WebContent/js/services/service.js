@@ -2,11 +2,11 @@
  * 
  */
 
-var serviceApp = angular.module('nullP', ['ngRoute', 'googlechart']);
+var serviceApp = angular.module('nullP', ['plunker','ngRoute', 'googlechart','ezfb', 'hljs',]);
 
 // Note: Providers can only be injected into config functions. Thus you could not inject $routeProvider into PhoneListCtrl. 
-serviceApp.config(['$routeProvider',
- function($routeProvider) {
+serviceApp.config(['$routeProvider','ezfbProvider',
+ function($routeProvider, ezfbProvider) {
    $routeProvider.
      when('/usuario/create', { templateUrl: 'usuario/create.html', controller: 'controller_teste'}).
      when('/usuario/conta', { templateUrl: 'usuario/ContaUsuario.html', controller: 'controller_teste'}).
@@ -20,6 +20,10 @@ serviceApp.config(['$routeProvider',
      otherwise({
        redirectTo: '/home'
      });
+   
+   ezfbProvider.setInitParams({
+	    appId: '458662504316602'
+	  });  
  }
 ]);
 
@@ -153,16 +157,58 @@ serviceApp.controller('controller_teste', function($scope, usuarioService, $loca
 	
 });
 
-serviceApp.controller('detalheDenunciaController', function($scope, $routeParams, $http) {
+serviceApp.controller('detalheDenunciaController', function($scope, $routeParams, $http, ezfb, $window) {
 	var param1 = $routeParams.param1;
+	
+	$scope.idDenuncia = param1;
 
 	if(param1 != null){
-		 $http.get("http://rcisistemas.minivps.info:8080/NullServer/denuncia/" + param1).success(function (data) {
-			 console.log("data = " + data.tipoDenuncia);
-			 $scope.tipoDenuncia = data.tipoDenuncia;
-			 $scope.observacao = data.observacao;
-			 $scope.dataDenuncia = data.dataDenuncia;
-			 var lisImagem = data.listImagem;
+		 //$http.get("http://rcisistemas.minivps.info:8080/NullServer/viewDetalheDenuncia/" + param1).success(function (data) {
+		 $http.get("http://rcisistemas.minivps.info:8080/NullServer/viewDetalheDenuncia/" + param1).success(function (data) {
+			 var lisImagem = [];
+			 for(var ob in data){
+				console.log(ob + " " + ob.toString());
+			}
+			 console.log("data = " + data.toString());
+			 if(data.tipoDenuncia != null){
+				 $scope.tipoDenuncia = "Tipo de Denuncia : " + data.tipoDenuncia;
+			 }
+			 if(data.observacao != null){
+				 $scope.observacao = "O que aconteceu : " + data.observacao;
+			 }
+			 if(data.dataDenuncia != null){
+				 $scope.dataDenuncia = "Data que Aconteceu : " + data.dataDenuncia;
+			 }
+			 if(data.listImagem != null){
+				 lisImagem = data.listImagem;
+			 }
+			 if(data.nomeDenunciante != null){
+				 $scope.nomeDenunciante = "Nome do Denunciante : " + data.nomeDenunciante ;
+			 }
+			 if(data.rua != null){
+				 $scope.rua = "Local que aconteceu Rua : " + data.rua ;
+			 }
+			 if(data.bairro != null){
+				 $scope.bairro = "Bairro : " + data.bairro ;
+			 }
+			 if(data.cidade != null){
+				 $scope.cidade = "Cidade : " + data.cidade ;
+			 }
+			 if(data.estado != null){
+				 $scope.estado = "Estado : " + data.estado ;
+			 }
+			 if(data.pais != null){
+				 $scope.pais = "Pais : " + data.pais ;
+			 }
+			 if(data.cep != null){
+				 $scope.cep = "CEP : " + data.cep ;
+			 }
+			 if(data.latitude != null){
+				 $scope.latitude = "Latitude : " + data.latitude ;
+			 }
+			 if(data.longitude != null){
+				 $scope.longitude = "longitude : " + data.longitude ;
+			 }
 			 console.log("data.listImagem = " + data.listImagem);
 			 var i = 0;
 			 for (i = 0; i < lisImagem.length; i++) { 

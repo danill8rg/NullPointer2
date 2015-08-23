@@ -1,6 +1,9 @@
 <meta charset="UTF-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+
 <div class="container">
+</br >
 	<div class="center-block" >
 		<img src="{{caminhoImagem}}" alt="Imagem da Denuncia" class="center-block img-responsive" >
 	</div>
@@ -9,10 +12,23 @@
 <div class="container">
 	<div class="center-block" >
 	</br >
-		<p class="text-center">Tipo de Denuncia : {{tipoDenuncia}}</p>
-		<p class="text-center">latitude : </p>
-		<p class="text-center">longitude : </p>
-		<p class="text-center">Data Aconteceu : {{dataDenuncia}} </p>
-		<p class="text-center">Observação : {{observacao}} </p>
+		<p class="text-center">{{tipoDenuncia}} </br ng-if="tipoDenuncia != null" >
+		{{dataDenuncia}} </br ng-if="dataDenuncia != null" >
+		{{nomeDenunciante}} </br ng-if="nomeDenunciante != null" >
+		{{rua}} 		</br ng-if="rua != null" >
+		{{bairro}}  	</br ng-if="bairro != null" >
+		{{cidade}} 		</br ng-if="cidade != null" >
+		{{estado}} 		</br ng-if="estado != null" >
+		{{pais}} 		</br ng-if="pais != null" >
+		{{cep}}  		</br ng-if="cep != null" >
+		{{latitude}} 	</br ng-if="latitude != null" >
+		{{longitude}} </p>
+		<p class="text-center">{{observacao}} </p> 	
 	</div>
+</div>
+
+<div class="container">
+	<div class="container center-block">
+      <div class="fb-comments" data-href="http://rcisistemas.minivps.info:8080/NullPointer/#/denuncia/detalhe/{{idDenuncia}}" data-numposts="10"  data-width="600" data-colorscheme="light"></div>
+    </div>
 </div>

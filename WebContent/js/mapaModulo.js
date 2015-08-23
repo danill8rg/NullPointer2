@@ -25,14 +25,40 @@ angular.module("angular-google-maps-example", ['uiGmapgoogle-maps'])
                           var listaDenuncia = [];
                           $scope.link = "http://www.w3schools.com/html/";
                           
+                          //$http.get("http://localhost:8080/NullServer/viewMap").success(function (data) {
                           $http.get("http://rcisistemas.minivps.info:8080/NullServer/viewMap").success(function (data) {
                         	  for (i = 0; i < data.length; i++) { 
                         		  console.log(data[i].idDenuncia);
                         		  console.log(parseFloat(data[i].latitude));
                         		  console.log(parseFloat(data[i].longitude)); 
-                        		  console.log(data[i].tipoDenuncia); 
+                        		  console.log(data[i].tipoDenuncia);
+                        		  
+                        		  console.log(data[i].tipoDenuncia == 'Drogas');
+                        		  var tipoMarcador = '';
+                        		  
+                        		  if(data[i].tipoDenuncia == 'Drogas'){
+                        			  tipoMarcador = 'http://rcisistemas.minivps.info:8080/NullPointer/images/ic_location_green.png';
+                        		  }else{
+                        			  if(data[i].tipoDenuncia == 'Alcool'){
+                        				  tipoMarcador = 'http://rcisistemas.minivps.info:8080/NullPointer/images/ic_location_blue.png';
+                            		  }else{
+                            			  if(data[i].tipoDenuncia == 'Assalto'){
+                            				  tipoMarcador = 'http://rcisistemas.minivps.info:8080/NullPointer/images/ic_location_rosa.png';
+                                		  }else{
+                                			  tipoMarcador = 'http://rcisistemas.minivps.info:8080/NullPointer/images/ic_location_yellow.png';
+                                		  }
+                            		  }
+                        		  }
+                        		  
+                        		  console.log("tipoMarcador = " +  tipoMarcador);
+                        		  var image = "https://maps.google.com/mapfiles/kml/shapes/info-i_maps.png";
+
                         		  var marker = {
+                        				  title: "Tipo da Denuncia: " + data[i].tipoDenuncia + " ",
                         				  id: data[i].idDenuncia,
+                        				  icon: {
+                        				        url:tipoMarcador
+                        				      },
                   		                time: "12:00PM",
                   		                coords: {
                   		                  latitude: data[i].latitude,
@@ -46,7 +72,7 @@ angular.module("angular-google-maps-example", ['uiGmapgoogle-maps'])
                   		                },
                   		                closeClick: function () {
                   		                  this.showWindow = false;
-                  		                },
+                  		                },                 		                
                   		                show: false
                         	     };
                         	    	 listaDenuncia.push(marker);
@@ -60,48 +86,18 @@ angular.module("angular-google-maps-example", ['uiGmapgoogle-maps'])
                         		        latitude: -16.32888061,
                         		        longitude: -48.94996101
                         		      },
-                        		      options: {
-                        		        streetViewControl: false,
-                        		        panControl: false,
-                        		        maxZoom: 20,
-                        		        minZoom: 3
-                        		      },
-                            doCluster: true,
-                            options: {
-                              streetViewControl: false,
-                              panControl: false,
-                              maxZoom: 18,
-                              minZoom: 3
-                            },                            
-                            clusterOptions: {},
+//                        		      options: {
+//                        		        streetViewControl: false,
+//                        		        panControl: false,
+//                        		        maxZoom: 20,
+//                        		        minZoom: 3
+//                        		      },
+//                            doCluster: true,
+//                            	                      
+//                            clusterOptions: {},
                             zoom: 7
                           };
-
-                          $scope.searchResults = {
-                            results: {
-                              length: 0
-                            }
-                          };
-
-                                             
-                          $scope.addMarkers = function (num) {
-                            var markers = {};
-                            var i = 0;
-
-                            for (i = 0; i < num; i++) {                  
-                              markers['someKey-' + lastId] ={
-                                'coords': {                        
-                                  'latitude': -16.32888061 + (i * 0.005),
-                                  'longitude': -48.94996101 + (i * 0.005)
-                                },
-                                'key': 'someKey-' + lastId
-                              };
-                              lastId++;
-                            }
-                            lastId = 1;//reset
-                            markers.length = num;
-                            $scope.searchResults.results = uiGmapObjectIterators.slapAll(markers);
-                          };
+                          console.log("mapa criado");
                         }
                       ]);
 
