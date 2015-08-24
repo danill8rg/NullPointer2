@@ -49,7 +49,17 @@
    <script src="../js/mapaModulo.js"></script>
    
    <link rel="stylesheet" type="text/css" href="../css/styleNullPointer.css" >
-
+   
+   
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.8.0/codemirror.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.8.0/codemirror.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.8.0/mode/htmlmixed/htmlmixed.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.8.0/mode/htmlembedded/htmlembedded.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.8.0/mode/xml/xml.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.8.0/mode/javascript/javascript.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular-animate.js"></script>
+  <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.13.3.js"></script>
+   
 </head>
 
 <body ng-controller="mapMarcar" >
@@ -63,7 +73,7 @@
           <div class="container">
             <div class="navbar-header">
               <!-- Logo Starts -->
-              <a class="navbar-brand" href="#home"><img src="../images/logo.png" alt="logo"></a>
+              <a style="height: 100%!important" class="navbar-brand" href="/NullPointer/#home"><img src="../images/logo.png" alt="logo"></a>
               <!-- #Logo Ends -->
              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
@@ -93,26 +103,90 @@
       </div>
     </div>
 <!-- #Header Starts -->
-
+<
 <!-- works -->
-<div id="works" > 
-   <ui-gmap-google-map center='map.center' zoom='map.zoom'>
- 			<ui-gmap-marker ng-repeat="m in map.markers" icon="m.icon" coords="m.coords" 
- 				click="map.onMarkerClick(m)" idkey="m.id"  events="markersEvents" >
-                <ui-gmap-window show="m.show" ng-cloak>
-                    <p>
-                     	<strong>{{m.title}}</strong><br/>
-                        Latitude: {{m.coords.latitude}}<br/>
-                        Longitude: {{m.coords.longitude}}<br/>
-                        <br/><br/>
-                        <a href="/NullPointer/#/denuncia/detalhe/{{m.id}}">Detalhes Denuncia</a>
-                    </p>
-                    <p>
-                    </p>
-                </ui-gmap-window>
-            </ui-gmap-marker>
-       
-    </ui-gmap-google-map>
+<div id="works" class="container" style=height: 100%!important;">
+ 	<h2 class="text-center">Fazer Denuncia</h2>
+ 	<div >
+		  <div style="height: 100%!important">
+		    <carousel interval="myInterval" no-wrap="noWrapSlides">
+		      <slide ng-repeat="slide in slides" active="slide.active">
+		        <img ng-src="{{slide.image}}" style="margin:auto;">
+		        <div class="carousel-caption">
+		          <h4>Slide {{$index}}</h4>
+		          <p>{{slide.text}}</p>
+		        </div>
+		      </slide>
+		    </carousel>
+		  </div>
+		</div>
+ </div>
+ 
+<div id="about" class="container spacer about" style="height: 100%!important" >
+	<form class="form-horizontal" form name="userForm" ng-submit="submitForm(userForm.$valid)" novalidate >
+	  <div class="form-group">
+	  	<form name="myForm">
+		  	<div class="col-sm-2">
+		      <button type="submit" class="btn btn-primary" ng-click="uploadPic(picFile)" >Add Foto</button>
+		    </div>
+		  	<div class="col-sm-10">
+		      <input type="file" ngf-select ng-model="picFile" name="file" accept="image/*">
+		      <img ng-show="picFile.dataUrl" ngf-src="picFile" class="thumb">
+		      <span class="progress" ng-show="picFile.progress >= 0">
+	                <div style="width:{{picFile.progress}}%" ng-bind="picFile.progress + '%'"></div>
+	            </span>
+		    </div>
+	    </form>
+	  </div>
+	  <div class="form-group">
+	    <label for="inputData" class="col-sm-2 control-label">Data Aconteceu</label>
+	    <div class="col-sm-10">
+	      <input type="datetime-local" class="form-control" id="inputData" placeholder="Email" style="width:35%" >
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label for="inputTipoDenuncia" class="col-sm-2 control-label">Tipo De Denuncia</label>
+	    <div class="col-sm-10">
+	      <select class="form-control" style="width:35%" >
+			  <option>Drogas</option>
+			  <option>Alcool</option>
+			  <option>Assasinato</option>
+			</select>
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label for="inputTipoDenuncia" class="col-sm-2 control-label">O que aconteceu</label>
+	    <div class="col-sm-10">
+	      <textarea class="form-control" rows="3"></textarea>
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label for="local" class="col-sm-2 control-label">Informe o Local</label>
+	    <div class="col-sm-10">
+	      <ui-gmap-google-map center='map.center' zoom='map.zoom'>
+		 			<ui-gmap-marker ng-repeat="m in map.markers" icon="m.icon" coords="m.coords" 
+		 				click="map.onMarkerClick(m)" idkey="m.id"  events="markersEvents" >
+		                <ui-gmap-window show="m.show" ng-cloak>
+		                    <p>
+		                     	<strong>{{m.title}}</strong><br/>
+		                        Latitude: {{m.coords.latitude}}<br/>
+		                        Longitude: {{m.coords.longitude}}<br/>
+		                        <br/><br/>
+		                        <a href="/NullPointer/#/denuncia/detalhe/{{m.id}}">Detalhes Denuncia</a>
+		                    </p>
+		                    <p>
+		                    </p>
+		                </ui-gmap-window>
+		            </ui-gmap-marker>
+		    </ui-gmap-google-map>
+	    </div>
+	  </div>
+	  <div class="form-group spacer">
+	    <div class="col-sm-offset-2 col-sm-10">
+	      <button type="submit" class="btn btn-primary" style="width:20%" >Denunciar</button>
+	    </div>
+	  </div>
+	</form>
 </div>
 <!-- works -->
 
@@ -163,6 +237,10 @@ Copyright 2015 NullPointer Creative Studio. All rights reserved.
 
 <!-- custom script -->
 <script src="../assets/script.js"></script>
+
+<!-- ng-file script -->
+<script src="../js/ng-file/ng-file-upload.min.js"></script>
+<script src="../js/ng-file/ng-file-upload-shim.min.js"></script>
 
 </body>
 </html>
