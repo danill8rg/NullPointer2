@@ -1,28 +1,14 @@
-var app = angular.module('plunker', ['ezfb', 'hljs', 'ngRoute'])
+var app = angular.module('plunker', ['ezfb', 'hljs'])
 
-.config(['$routeProvider','ezfbProvider', function ($routeProvider, ezfbProvider) {
-  $routeProvider.
-  when('/usuario/create', { templateUrl: 'usuario/create.html', controller: 'controller_teste'}).
-  when('/usuario/conta', { templateUrl: 'usuario/ContaUsuario.html', controller: 'controller_teste'}).
-  when('/home', { templateUrl: 'home.html', controller: 'controller_teste'}).
-  when('/list', { templateUrl: 'list.html', controller: 'controller_teste'}).
-  when('/create', { templateUrl: 'create.html', controller: 'controller_teste'}).
-  when('/denuncia/detalhe/:param1', { templateUrl: 'denuncia/detalhe.html', controller: 'detalheDenunciaController'}).
-  when('/delete', { templateUrl: 'list.html', controller: 'controller_teste'}).
-  when('/grafico', { templateUrl: 'grafico/grafico.html', controller: 'GenericChartCtrl'}).
-  
-  otherwise({
-    redirectTo: '/home'
-  });
+.config(function (ezfbProvider) {
   
   ezfbProvider.setInitParams({
 	    appId: '458662504316602'
 	  });  
 	  
-  
-}])
+})
 
-.controller('MainCtrl', function($scope, ezfb, $window, $location, $http, $routeParams) {
+.controller('MainCtrl', function($scope, ezfb, $window, $location, $http) {
   
   updateLoginStatus(updateApiMe);
   
@@ -77,7 +63,7 @@ var app = angular.module('plunker', ['ezfb', 'hljs', 'ngRoute'])
   var autoToJSON = ['loginStatus', 'apiMe', ]; 
   angular.forEach(autoToJSON, function (varName) {
     $scope.$watch(varName, function (val) {
-      $scope[varName + 'JSON'] = JSON.stringify(val, null, 2);
+      $scope[varName + 'JSON'] = JSON.stringify(val, null, 5);
     }, true);
   });
   
@@ -100,9 +86,6 @@ var app = angular.module('plunker', ['ezfb', 'hljs', 'ngRoute'])
       $scope.apiMe = res;
     });
   }
-  
-  var test = "" + $routeParams.param1;
-  console.log("$routeParams.param1 = " + test);
   
   var param1 = 2;
 	

@@ -1,0 +1,49 @@
+<meta charset="UTF-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<div id="works" class="container" >
+		<div class="alert alert-success" ng-show="avisoUser"  >
+		  <button type="button" ng-click="closeMensagem()" data-dismiss="alert">×</button>
+		  <h4>Desculpe!</h4>
+		  Não foi encontrado o usuário informado. Por gentileza verifique e informe novamente!!!
+		</div>
+		
+		<div class="alert alert-success" ng-show="avisoDeslocado"  >
+		  <button type="button" class="close" data-dismiss="alert">&times;</button>
+		  <h4>Deslocado!</h4>
+		  Você se desconectou da aplicação, muito obrigado por utilizar o NullPointer!!!
+		</div>
+		
+	<div class="container" ng-show="log" style="height : 100% !important;" >
+		<h2 class="text-center">Fazer Login</h2>
+		<form name="userForm" ng-submit="submitForm(userForm.$valid)" novalidate> 
+		      <!-- EMAIL -->
+		      <div class="form-group">
+		         <label>Email</label>
+		         <div class="alert alert-danger help-block" ng-show="userForm.email.$invalid && !userForm.email.$pristine"  role="alert">Informe um e-mail válido.</div>
+				 <input type="email" name="email" class="form-control center-block" ng-model="email" required style="width: 65%;" >
+		      </div>
+		                
+		      <!-- Senha -->
+		      <div class="form-group">
+		        <label>Senha</label>
+		         <div class="alert alert-danger help-block" ng-show="userForm.senha.$error.minlength"  role="alert">Username no mínimo 3 caracteres.</div>
+		        <input type="password" name="senha" class="form-control center-block" ng-model="senha" required ng-minlength="3" style="width: 65%;" >
+		     </div>
+		   
+		     <!-- SUBMIT BUTTON -->
+		     <div class="form-group">
+				 <a style="width: 15%;" class="btn btn-primary" href="#/home" role="button">Cancelar</a>
+		    	 <button style="width: 15%;" type="submit" class="btn btn-primary"  ng-disabled="(userForm.$invalid)"  ng-click="logarApp()" >Logar</button>  
+			 </div>
+			 <div class="form-group">
+			    	<button style="width: 25%;" class="btn btn-primary" ng-click="login()" ng-disabled="loginStatus.status == 'connected'">Logar com Facebook</button>  
+			 </div>
+		</form>
+		
+	</div>
+	
+	<div class="container" ng-show="!log" >
+		<h2> Fazer Log out</h2>
+	</div>
+</div>

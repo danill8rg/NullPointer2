@@ -12,18 +12,42 @@
 <div class="container">
 	<div class="center-block" >
 	</br >
-		<p class="text-center">{{tipoDenuncia}} </br ng-if="tipoDenuncia != null" >
-		{{dataDenuncia}} </br ng-if="dataDenuncia != null" >
-		{{nomeDenunciante}} </br ng-if="nomeDenunciante != null" >
-		{{rua}} 		</br ng-if="rua != null" >
-		{{bairro}}  	</br ng-if="bairro != null" >
-		{{cidade}} 		</br ng-if="cidade != null" >
-		{{estado}} 		</br ng-if="estado != null" >
-		{{pais}} 		</br ng-if="pais != null" >
-		{{cep}}  		</br ng-if="cep != null" >
-		{{latitude}} 	</br ng-if="latitude != null" >
-		{{longitude}} </p>
-		<p class="text-center">{{observacao}} </p> 	
+	<div ng-show="tipoDenuncia != null" class="text-center">
+		{{tipoDenuncia}} </br>
+	</div>
+	<div ng-show="dataDenuncia != null" class="text-center">
+		{{dataDenuncia}} </br>
+	</div>
+	<div ng-show="nomeDenunciante != null" class="text-center">
+		{{nomeDenunciante}} </br>
+	</div>
+	<div ng-show="rua != null" class="text-center">
+		{{rua}} </br>
+	</div>
+	<div ng-show="bairro != null" class="text-center">
+		{{bairro}} </br>
+	</div>
+	<div ng-show="cidade != null" class="text-center">
+		{{cidade}} </br>
+	</div>
+	<div ng-show="estado != null" class="text-center">
+		{{estado}} </br>
+	</div>
+	<div ng-show="pais != null" class="text-center">
+		{{pais}} </br>
+	</div>
+	<div ng-show="cep != null" class="text-center">
+		{{cep}} </br>
+	</div>
+	<div ng-show="latitude != null" class="text-center">
+		{{latitude}} </br>
+	</div>
+	<div ng-show="longitude != null" class="text-center">
+		{{longitude}} </br>
+	</div>
+	<div ng-show="observacao != null" class="text-center">
+		{{observacao}} </br>
+	</div>
 	</div>
 </div>
 
