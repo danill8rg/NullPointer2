@@ -101,21 +101,26 @@ angular.module("angular-google-maps-example", ['uiGmapgoogle-maps', 'ngFileUploa
 .controller("mapMarcar", ["$scope", "uiGmapLogger", "uiGmapObjectIterators", '$http',
                           '$timeout', '$compile', 'Upload', 
       function ($scope, logger, uiGmapObjectIterators, $http, $timeout, $compile, Upload) {
-	  
+	  var caminho_imagem_upload = "";
+	
 	  $scope.myInterval = 5000;
 	  $scope.noWrapSlides = false;
-	  var slides = $scope.slides = [];
+	  var slides = $scope.slides = [ ];
 	  $scope.addSlide = function() {
-	    var newWidth = 600 + slides.length + 1;
-	    slides.push({
-	      image: '//placekitten.com/' + newWidth + '/300',
-	      text: ['More','Extra','Lots of','Surplus'][slides.length % 4] + ' ' +
-	        ['Cats', 'Kittys', 'Felines', 'Cutes'][slides.length % 4]
-	    });
+		  console.log("$scope.addSlide = function()");
+		if(caminho_imagem_upload != "" ){
+			console.log("caminho_imagem_upload != vazio");
+			var newWidth = 600 + slides.length + 1;
+			console.log(caminho_imagem_upload),
+		    slides.push({
+		    			  image: caminho_imagem_upload
+		    		})
+		    caminho_imagem_upload = "";
+		}else{
+			console.log("caminho_imagem_upload == vazio");
+			$scope.addAlert("Não foi possível anexar imagem, por gentileza informe apenas arquivo válido, PNG, JPEG, JPG!");
+		}
 	  };
-	  for (var i=0; i<4; i++) {
-	    $scope.addSlide();
-	  }    
 	
 	$scope.init = function(){                   
         	 if(window.sessionStorage.getItem('idUsuario') != null){
@@ -135,12 +140,69 @@ angular.module("angular-google-maps-example", ['uiGmapgoogle-maps', 'ngFileUploa
          var clusterThresh = 6;
                     	
          $scope.map = {
-        		 center: {
-                    latitude: -16.32888061,
-                    longitude: -48.94996101
-                 },
-                 zoom: 7
-                };
+        		    center: {
+        		      latitude: 45,
+        		      longitude: -73
+        		    },
+        		    zoom: 3,
+        		    events: {
+        		      tilesloaded: function (map, eventName, originalEventArgs) {
+        		        //map is trueley ready then this callback is hit
+        		      },
+        		      click: function (mapModel, eventName, originalEventArgs) {
+        		        var e = originalEventArgs[0];
+        		        var lat = e.latLng.lat(),
+        		            lon = e.latLng.lng();
+        		        $scope.map.clickedMarker = {
+        		          id:0,
+        		          title: 'You clicked here ' + 'lat: ' + lat + ' lon: ' + lon,
+        		          latitude: lat,
+        		          longitude: lon
+        		        };
+        		        //scope apply required because this event handler is outside of the angular domain
+        		        $scope.$apply();
+        		      }
+        		    },marker2: {
+                        id: 0,
+                        draggable:true,
+                        animation: google.maps.Animation.DROP,
+                        latitude: 50.2,
+                        longitude: -80.5
+                      },
+        		    markers: [
+        		      {
+        		        id: 1,
+        		        latitude: 45,
+        		        longitude: -74,
+        		        showWindow: false,
+        		        title: 'Markers: 1'
+        		      },
+        		      {
+        		        id: 2,
+        		        latitude: 15,
+        		        longitude: 30,
+        		        showWindow: false,
+        		        title: 'Markers: 2'
+        		      },
+        		      {
+        		        id: 3,
+        		        icon: 'assets/images/plane.png',
+        		        latitude: 37,
+        		        longitude: -122,
+        		        showWindow: false,
+        		        title: 'Markers: 3'
+        		      }
+        		    ],
+        		    clickedMarker: {
+        		      id:0,
+        		      title: ''
+        		    },
+        		    onMarkerClicked: function (marker) {
+        		      marker.showWindow = true;
+        		      $scope.$apply();
+        		      //window.alert("Marker: lat: " + marker.latitude + ", lon: " + marker.longitude + " clicked!!")
+        		    }
+        		  };
         var  version = "7.0.7";
          
          $scope.usingFlash = FileAPI && FileAPI.upload != null;
@@ -171,19 +233,43 @@ angular.module("angular-google-maps-example", ['uiGmapgoogle-maps', 'ngFileUploa
              }
            }
          });
+         
+         $scope.gerarDenuncia = function () {
+             console.log("$scope.gerarDenuncia");
+             if($scope.dataAdionada!= null){
+            	 console.log($scope.dataAdionada);
+             }
+             if($scope.tipoDenuncia!= null){
+            	 console.log($scope.tipoDenuncia);
+             }
+             if($scope.detalhe!= null){
+            	 console.log($scope.detalhe);
+             }
+             
+             if($scope.map.clickedMarker!= null){
+            	 console.log("$scope.map.clickedMarker != nullo");
+            	 console.log("latitude = " + $scope.map.clickedMarker.latitude);
+            	 console.log("longitude = " + $scope.map.clickedMarker.longitude);
+             }else{
+            	 console.log("$scope.map.clickedMarker == nullo");
+             }
+             
+             if(slides != []){
+            	 var index = 0;
+            	 for (index = 0; index < slides.length; index++) {
+            	     console.log(slides[index].image);
+            	 }
+             }
+           };
 
          $scope.uploadPic = function (file) {
            console.log("$scope.uploadPic = function (file) {");
            $scope.formUpload = true;
            if (file != null) {
         	   var teste = file.files;
-        	 console.log("upload(file)");
-        	 console.log(teste);
-        	 console.log("file.getAsDataURL " );
-        	 console.log("file.name " + file.name);
-        	 console.log("file.type " + file.type);
              upload(file)
            }else{
+        	   $scope.addAlert("Não há nenhum arquivo selecionado. Por gentile selecione um arquivo!");
         	   console.log("file is NULL");
            }
          };
@@ -225,9 +311,6 @@ angular.module("angular-google-maps-example", ['uiGmapgoogle-maps', 'ngFileUploa
          }
 
          function uploadUsing$http(file) {
-        	 
-        	 
-        	 
            file.upload = Upload.http({
              url: 'http://localhost:8080/NullServer/img/fileupload' + $scope.getReqParams(),
              method: 'POST',
@@ -238,11 +321,21 @@ angular.module("angular-google-maps-example", ['uiGmapgoogle-maps', 'ngFileUploa
            });
 
            file.upload.then(function (response) {
+        	 console.log("file.upload.then(function (response) {");
              file.result = response.data;
+             if (response.status == 200 || response.status == 201 || response.status == 202 ){
+            	 console.log("statu ok!" + response.status);
+            	 var object = response.data;
+            	 console.log("response.caminho = " + "" + object.caminho);
+            	 caminho_imagem_upload = "" + object.caminho;
+            	 $scope.addSlide();
+            	 $scope.picFile = null;
+             }else{
+            	 console.log("statu deu merda!" + response.status);
+            	 $scope.errorMsg = response.status + ': ' + response.data;
+             }
            }, function (response) {
-             if (response.status > 0)
-               $scope.errorMsg = response.status + ': ' + response.data;
-           });
+        });
 
            file.upload.progress(function (evt) {
              file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
@@ -333,6 +426,24 @@ angular.module("angular-google-maps-example", ['uiGmapgoogle-maps', 'ngFileUploa
          $scope.$watch('validate', function (v) {
            $scope.validateObj = eval('(function(){return ' + v + ';})()');
          });
+         
+         $scope.alerts = [ ];
+         
+         $scope.addAlert = function(msg_string) {
+        	    $scope.alerts.push({msg: msg_string});
+        	  };
+
+         $scope.closeAlert = function(index) {
+        	    $scope.alerts.splice(index, 1);
+        	  };
+        	  
+	  $scope.toggleBounce = function() {
+	      if (this.getAnimation() != null) {
+	        this.setAnimation(null);
+	      } else {
+	        this.setAnimation(google.maps.Animation.BOUNCE);
+	      }
+	    }
 
          $timeout(function () {
            $scope.capture = localStorage.getItem('capture' + version) || 'camera';
