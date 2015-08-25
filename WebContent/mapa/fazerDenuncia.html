@@ -124,7 +124,7 @@
  
 <div id="about" class="container spacer about" style="height: 100%!important" >
 	<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
-	<form class="form-horizontal" form name="userForm" ng-submit="submitForm(userForm.$valid)" novalidate >
+	<form class="form-horizontal" form name="userForm2" ng-submit="submitForm(userForm.$valid)" novalidate >
 	  <div class="form-group">
 	  	<form name="myForm">
 		  	<div class="col-sm-2">
@@ -142,7 +142,7 @@
 	  </div>
 	  <li class="divider" style="color:white;"> </li>
 	  <div class="form-group">
-	    <label for="inputData" class="col-sm-2 control-label">Data Aconteceu</label>
+	    <label for="inputData" class="col-sm-2 control-label">Data em que Aconteceu</label>
 	    <div class="col-sm-10">
 	      <input type="datetime-local" class="form-control" id="inputData" ng-model="dataAdionada" required style="width:35%" >
 	    </div>
@@ -152,9 +152,10 @@
 	    <label for="inputTipoDenuncia" class="col-sm-2 control-label">Tipo De Denuncia</label>
 	    <div class="col-sm-10">
 	      <select class="form-control" style="width:35%" id="tipoDenuncia"   ng-model="tipoDenuncia" required  >
-			  <option>Drogas</option>
+			  <option>Assalto</option>
+			  <option>Assassinato</option>
 			  <option>Alcool</option>
-			  <option>Assasinato</option>
+			  <option>Drogas</option>
 			</select>
 	    </div>
 	  </div>
@@ -167,8 +168,7 @@
 	  </div>
 	  <li class="divider" style="color:white;"> </li>
 			<div class="form-group">
-				<label for="local" class="col-sm-2 control-label">Informe o
-					Local</label>
+				<label for="local" class="col-sm-2 control-label">Informe o Local da Denuncia</label>
 				<div class="col-sm-10">
 					<ui-gmap-google-map class="col-sm-12 pad-none" center="map.center" zoom="map.zoom" style="min-height: 600px" draggable="true" events="map.events">
 				        <!--marker for clicked position can not put google.map.animations.BOUNCE , since it is not initiaized yet-->
@@ -183,13 +183,12 @@
 				    </ui-gmap-google-map>
 				</div>
 			</div>
-			<div class="form-group spacer">
-	    <div class="col-sm-offset-2 col-sm-10">
-	      <button type="submit" class="btn btn-primary" style="width:25%" ng-disabled="(userForm.$invalid)"  ng-click="gerarDenuncia()" >Fazer Denuncia</button>
-	    </div>
-	  </div>
 	</form>
 </div>
+	 <div class="container center-block">
+	  	 <alert ng-repeat="alert2 in alerts2" type="{{alert2.type}}" close="closeAlert2($index)">{{alert2.msg}}</alert>
+	 	 <button type="submit" class="btn btn-primary" style="width:25%; display: block;margin-right: auto;margin-left: auto;" ng-disabled="(userForm.$invalid)"  ng-click="gerarDenuncia()" >Fazer Denuncia</button>
+	 </div>
 <!-- works -->
 
 

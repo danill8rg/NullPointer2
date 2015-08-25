@@ -5,7 +5,19 @@
 <div class="container">
 </br >
 	<div class="center-block" >
-		<img src="{{caminhoImagem}}" alt="Imagem da Denuncia" class="center-block img-responsive" >
+	<div >
+		  <div style="height: 100%!important">
+		    <carousel interval="myInterval" no-wrap="noWrapSlides">
+		      <slide ng-repeat="slide in slides" active="slide.active">
+		        <img ng-src="{{slide.image}}" style="margin:auto;">
+		        <div class="carousel-caption">
+		          <h4>Slide {{$index}}</h4>
+		          <p>{{slide.text}}</p>
+		        </div>
+		      </slide>
+		    </carousel>
+		  </div>
+		</div>
 	</div>
 </div>
 

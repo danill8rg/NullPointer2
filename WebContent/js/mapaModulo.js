@@ -1,5 +1,5 @@
 'use strict';
-angular.module("angular-google-maps-example", ['uiGmapgoogle-maps', 'ngFileUpload', 'ui.bootstrap'])
+angular.module("angular-google-maps-example", ['uiGmapgoogle-maps', 'ngFileUpload', 'ui.bootstrap', 'ngRoute'])
 
 .value("rndAddToLatLon", function () {
 	return Math.floor(((Math.random() < 0.5 ? -1 : 1) * 2) + 1);
@@ -36,72 +36,96 @@ angular.module("angular-google-maps-example", ['uiGmapgoogle-maps', 'ngFileUploa
 	var lastId = 1;
 	var clusterThresh = 6;
 	var listaDenuncia = [];
-	$scope.link = "http://www.w3schools.com/html/";
-	//$http.get("http://rcisistemas.minivps.info:8080/NullServer/viewMap").success(function (data) {
-	$http.get("http://localhost:8080/NullServer/viewMap").success(function (data) {
+	var markers = [];
+	
+	$scope.map = {
+			markers: markers,
+			center: {
+				latitude: -16.32888061,
+				longitude: -48.94996101
+			},
+			zoom: 7
+	};
+	
+	markers = $scope.map.markers ;
+	
+	var initMap = function(){            
+	}
+	initMap();
+	var millisecondsToWait = 5000;
+	setTimeout(function() {
+		//$http.get("http://localhost:8080/NullServer/viewMap").success(function (data) {
+		$http.get("http://rcisistemas.minivps.info:8080/NullServer/viewMap").success(function (data) {	
 		for (i = 0; i < data.length; i++) { 
-			console.log(data[i].idDenuncia);
-			console.log(parseFloat(data[i].latitude));
-			console.log(parseFloat(data[i].longitude)); 
-			console.log(data[i].tipoDenuncia);
-			console.log(data[i].tipoDenuncia == 'Drogas');
-			var tipoMarcador = '';
-			if(data[i].tipoDenuncia == 'Drogas'){
-				tipoMarcador = 'http://rcisistemas.minivps.info:8080/NullPointer/images/ic_location_green.png';
-			}else{
-				if(data[i].tipoDenuncia == 'Alcool'){
-					tipoMarcador = 'http://rcisistemas.minivps.info:8080/NullPointer/images/ic_location_blue.png';
+				var tipoMarcador = '';
+				if(data[i].tipoDenuncia == 'Drogas'){
+					tipoMarcador = 'http://rcisistemas.minivps.info:8080/NullPointer/images/ic_location_green.png';
 				}else{
-					if(data[i].tipoDenuncia == 'Assalto'){
-						tipoMarcador = 'http://rcisistemas.minivps.info:8080/NullPointer/images/ic_location_rosa.png';
+					if(data[i].tipoDenuncia == 'Alcool'){
+						tipoMarcador = 'http://rcisistemas.minivps.info:8080/NullPointer/images/ic_location_blue.png';
 					}else{
-						tipoMarcador = 'http://rcisistemas.minivps.info:8080/NullPointer/images/ic_location_yellow.png';
+						if(data[i].tipoDenuncia == 'Assalto'){
+							tipoMarcador = 'http://rcisistemas.minivps.info:8080/NullPointer/images/ic_location_rosa.png';
+						}else{
+							tipoMarcador = 'http://rcisistemas.minivps.info:8080/NullPointer/images/ic_location_yellow.png';
+						}
 					}
 				}
+				console.log("tipoMarcador = " +  tipoMarcador);
+				var image = "https://maps.google.com/mapfiles/kml/shapes/info-i_maps.png";
+				var marker = {
+					title: "Tipo da Denuncia: " + data[i].tipoDenuncia + " ",
+					id: data[i].idDenuncia,
+					icon: {
+						url:tipoMarcador
+					},
+					time: "12:00PM",
+					coords: {
+						latitude: data[i].latitude,
+						longitude: data[i].longitude
+					},
+					lastSignal: "Never",
+					click: function () {
+						this.show = true;
+						this.lastSignal = Math.round(Date.now()).toString();
+						$scope.apply();
+					},
+					closeClick: function () {
+						this.showWindow = false;
+					},                                    
+					show: false
+				};
+				$scope.map.markers.push(marker);
 			}
-			console.log("tipoMarcador = " +  tipoMarcador);
-			var image = "https://maps.google.com/mapfiles/kml/shapes/info-i_maps.png";
-			var marker = {
-				title: "Tipo da Denuncia: " + data[i].tipoDenuncia + " ",
-				id: data[i].idDenuncia,
-				icon: {
-					url:tipoMarcador
-				},
-				time: "12:00PM",
-				coords: {
-					latitude: data[i].latitude,
-					longitude: data[i].longitude
-				},
-				lastSignal: "Never",
-				click: function () {
-					this.show = true;
-					this.lastSignal = Math.round(Date.now()).toString();
-					$scope.apply();
-				},
-				closeClick: function () {
-					this.showWindow = false;
-				},                                    
-				show: false
-			};
-			listaDenuncia.push(marker);
-		}
-	});            
-	console.log("teste");
-	$scope.map = {
-		markers: listaDenuncia,
-		center: {
-			latitude: -16.32888061,
-			longitude: -48.94996101
-		},
-		zoom: 7
-	};
+		});   
+	}, millisecondsToWait);
+	
+	
+	$scope.link = "http://www.w3schools.com/html/";
+	//$http.get("http://rcisistemas.minivps.info:8080/NullServer/viewMap").success(function (data) {
+         
+	console.log("teste");	
 	console.log("mapa criado");
 }])
 
 .controller("mapMarcar", ["$scope", "uiGmapLogger", "uiGmapObjectIterators", '$http',
-                          '$timeout', '$compile', 'Upload', 
-      function ($scope, logger, uiGmapObjectIterators, $http, $timeout, $compile, Upload) {
+                          '$timeout', '$compile', 'Upload', '$location', '$window',
+      function ($scope, logger, uiGmapObjectIterators, $http, $timeout, $compile, Upload, $location, $window) {
 	  var caminho_imagem_upload = "";
+	  $scope.init = function(){                   
+			if(window.sessionStorage.getItem('idUsuario') != null){
+				id_usuario_null_pointer = window.sessionStorage.getItem('idUsuario');
+			}else{
+			 id_usuario_null_pointer = 0;
+			}
+			if(id_usuario_null_pointer != 0){
+				$scope.logStatus = "Sair";
+			}else{
+				$scope.logStatus = "Logar";
+			}
+		}
+
+      $scope.init();	  
 	
 	  $scope.myInterval = 5000;
 	  $scope.noWrapSlides = false;
@@ -121,30 +145,36 @@ angular.module("angular-google-maps-example", ['uiGmapgoogle-maps', 'ngFileUploa
 			$scope.addAlert("Não foi possível anexar imagem, por gentileza informe apenas arquivo válido, PNG, JPEG, JPG!");
 		}
 	  };
+	  $scope.alerts = [ ];
+      
+	  $scope.addAlert = function( msg_string) {
+     	    $scope.alerts.push({msg: msg_string});
+     	  };
+
+      $scope.closeAlert = function(index) {
+     	    $scope.alerts.splice(index, 1);
+     	  };
+     	  
+     $scope.alerts2 = [ ];
+         
+   	  $scope.addAlert2 = function( msg_string) {
+        	    $scope.alerts2.push({msg: msg_string});
+      };
+
+         $scope.closeAlert2 = function(index) {
+        	    $scope.alerts2.splice(index, 1);
+         };
 	
-	$scope.init = function(){                   
-        	 if(window.sessionStorage.getItem('idUsuario') != null){
-                id_usuario_null_pointer = "disconected"
-             }else{
-                id_usuario_null_pointer = 0;
-             }
-             if(id_usuario_null_pointer != 0){
-                $scope.logStatus = "Sair";
-              }else{
-                $scope.logStatus = "Logar";
-              }
-         }
-         $scope.init();
          var i = 0;
          var lastId = 1;
          var clusterThresh = 6;
                     	
          $scope.map = {
         		    center: {
-        		      latitude: 45,
-        		      longitude: -73
+        		      latitude: -16.35041579,
+        		      longitude: -48.9717108
         		    },
-        		    zoom: 3,
+        		    zoom: 13,
         		    events: {
         		      tilesloaded: function (map, eventName, originalEventArgs) {
         		        //map is trueley ready then this callback is hit
@@ -235,21 +265,31 @@ angular.module("angular-google-maps-example", ['uiGmapgoogle-maps', 'ngFileUploa
          });
          
          $scope.gerarDenuncia = function () {
+        	 if(id_usuario_null_pointer == 0){
+        		 $scope.addAlert2("Você não está Logado, se continuar criará uma denúncia anônima e não terá permissão para edita-lá posteriomente! Clique em Fazer Denuncia para continuar e fazer a denúncia anônima.");
+        		 id_usuario_null_pointer = 1;
+        	 }
+        	 
              console.log("$scope.gerarDenuncia");
              if($scope.dataAdionada!= null){
             	 console.log($scope.dataAdionada);
+             }else{
+            	 $scope.addAlert2("Por gentileza, Informe a data que aconteceu corretamente. Este dado é importante para criar um histórico das ocorrências!");
+            	 $scope.dataAdionada =  new Date();
              }
              if($scope.tipoDenuncia!= null){
             	 console.log($scope.tipoDenuncia);
+             }else{
+            	 $scope.addAlert2("Por gentileza, Informe corretamente o tipo de denúncia que deseja registrar!");
              }
              if($scope.detalhe!= null){
             	 console.log($scope.detalhe);
+             }else{
+            	 $scope.addAlert2("Por gentileza, Informe corretamente o que aconteceu. Este dado é importane para comunicar a toda a sociedade o que de fato aconteceu!");
              }
              
-             if($scope.map.clickedMarker!= null){
-            	 console.log("$scope.map.clickedMarker != nullo");
-            	 console.log("latitude = " + $scope.map.clickedMarker.latitude);
-            	 console.log("longitude = " + $scope.map.clickedMarker.longitude);
+             if($scope.map.clickedMarker.latitude == null ){
+            	 $scope.addAlert2("Por gentileza, Informe corretamente o local da Denúncia. Este dado é importane para mapear ás áreas críticas. Para informar este dado de um clique no mapa no exato local da denúncia!");
              }else{
             	 console.log("$scope.map.clickedMarker == nullo");
              }
@@ -260,6 +300,34 @@ angular.module("angular-google-maps-example", ['uiGmapgoogle-maps', 'ngFileUploa
             	     console.log(slides[index].image);
             	 }
              }
+             
+             if($scope.map.clickedMarker.latitude != null && 
+            		 $scope.detalhe != null && $scope.tipoDenuncia != null &&
+            		 $scope.dataAdionada != null && id_usuario_null_pointer != 0){
+            	 $scope.addAlert2("Registrando a Denuncia! Por gentileza aguarde....");
+            	 var data = {
+     					"latitude" :$scope.map.clickedMarker.latitude,
+     					"longitude" : $scope.map.clickedMarker.longitude,
+     					"tipoDenuncia" : $scope.tipoDenuncia,
+     					"observacao" : $scope.detalhe,
+     					"dataAdicionada" : $scope.dataAdionada,
+     					"arrayImagemm" : slides,
+     					"idUsuario" : id_usuario_null_pointer
+     				};
+            	 
+            	 //$http.post("http://localhost:8080/NullServer/denuncia/denuncia_site", {denuncia : data}).success(
+            	 $http.post("http://rcisistemas.minivps.info:8080/NullServer/denuncia/denuncia_site", {denuncia : data}).success(	
+            	 function(data) {
+ 							console.log("Salvo com Sucesso era para redirecionar");
+ 							$window.location.href = '/NullPointer/mapa/mapa.html';
+ 						}).error(function(data){
+ 							console.log("Erro ao salvar Denuncia");
+ 							 $scope.addAlert2("Ocorreu algum erro ao salvar a denúncia. Por gentliza contacte o e-mail: danill8rg@gmail.com e avise. Tente registrar a Denúncia posteriomente. Desculpe pelo transtorno e estarei resolvensdo o problema assim que possível.");
+ 						 })
+             }
+             
+             
+             
            };
 
          $scope.uploadPic = function (file) {
@@ -312,8 +380,9 @@ angular.module("angular-google-maps-example", ['uiGmapgoogle-maps', 'ngFileUploa
 
          function uploadUsing$http(file) {
            file.upload = Upload.http({
-             url: 'http://localhost:8080/NullServer/img/fileupload' + $scope.getReqParams(),
-             method: 'POST',
+             //url: 'http://localhost:8080/NullServer/img/fileupload' + $scope.getReqParams(),
+        	  url: 'http://rcisistemas.minivps.info:8080/NullServer/img/fileupload' + $scope.getReqParams(),
+        	  method: 'POST',
              headers: {
                'Content-Type': "multipart/form-data"
              },
@@ -426,16 +495,6 @@ angular.module("angular-google-maps-example", ['uiGmapgoogle-maps', 'ngFileUploa
          $scope.$watch('validate', function (v) {
            $scope.validateObj = eval('(function(){return ' + v + ';})()');
          });
-         
-         $scope.alerts = [ ];
-         
-         $scope.addAlert = function(msg_string) {
-        	    $scope.alerts.push({msg: msg_string});
-        	  };
-
-         $scope.closeAlert = function(index) {
-        	    $scope.alerts.splice(index, 1);
-        	  };
         	  
 	  $scope.toggleBounce = function() {
 	      if (this.getAnimation() != null) {

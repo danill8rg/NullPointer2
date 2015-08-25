@@ -1,7 +1,7 @@
 // 0 = desconectado;
 var id_usuario_null_pointer = 0;
 
-var serviceApp = angular.module('nullP', [ 'ngRoute', 'googlechart', 'ezfb','hljs' ]);
+var serviceApp = angular.module('nullP', [ 'ngRoute', 'googlechart', 'ezfb','hljs',  'ui.bootstrap' ]);
 
 serviceApp.config([ '$routeProvider', 'ezfbProvider',
 		function($routeProvider, ezfbProvider) {
@@ -60,10 +60,8 @@ serviceApp.service('usuarioService',function($http, $rootScope) {
 				"email" : email
 			};
 
-			// var promise_post =
-			// $http.post('http://rcisistemas.minivps.info:8080/NullServer/usuario/addUser',
-			// {usuario:data});
-			var promise_post = $http.post('http://localhost:8080/NullServer/usuario/addUser',{usuario : data});
+			//var promise_post = $http.post('http://localhost:8080/NullServer/usuario/addUser',{usuario : data});
+			var promise_post = $http.post('http://rcisistemas.minivps.info:8080/NullServer/usuario/addUser',{usuario : data});
 				promise_post.success(function(data, status, headers, config) {
 					id_usuario_null_pointer = data.idUsuario;
 					console.log("data = " + data);
@@ -83,8 +81,8 @@ serviceApp.service('usuarioService',function($http, $rootScope) {
 		};
 
 		this.validarEmail = function(email) {
-			return $http.get("http://localhost:8080/NullServer/usuario/validaremail/"+ email);
-			//return $http.get("http://rcisistemas.minivps.info:8080/NullServer/usuario/validaremail/"+ email);
+			//return $http.get("http://localhost:8080/NullServer/usuario/validaremail/"+ email);
+			return $http.get("http://rcisistemas.minivps.info:8080/NullServer/usuario/validaremail/"+ email);
 		};
 
 });
@@ -101,69 +99,43 @@ serviceApp.controller('controller_teste', function($scope, usuarioService,ezfb, 
 			id_usuario_null_pointer = window.sessionStorage.getItem('idUsuario');
 			$scope.logStatus = "Sair";
 		} else {
+			updateLoginStatus();
 			$scope.logStatus = "Logar";
 			id_usuario_null_pointer = 0;
 		}
 	}
 	$scope.init();
-
-	updateLoginStatus(updateApiMe);
-
-	$scope.login = function() {
-		ezfb.login(function(res) {
-			if (res.authResponse) {
-				updateLoginStatus(updateApiMe);
-				var nomeUsuario = res.name;
-				var email = res.name;
-				var senha = res.id;
-				var data = {
-					"nome" : nomeUsuario,
-					"senha" : senha,
-					"email" : email
-				};
-				// var promise_post =
-				// $http.post('http://rcisistemas.minivps.info:8080/NullServer/usuario/addUser');
-				$http.post("http://localhost:8080/NullServer/usuario/addUser", {usuario : data}).success(
-						function(data) {
-							if (data.idUsuario != null) {
-								window.sessionStorage.setItem("idUsuario", data.idUsuario);
-								id_usuario_null_pointer = data.idUsuario;
-								window.location.reload();
-								$window.location.href = '#/minhasDenuncias';
-							} else {
-								$scope.mensagemErroSalvarUsuario = true;
-								console.log("Erro ao salvar usuário!!! ");
-							}
-						});
-			}
-		}, {
-			scope : 'email,user_likes'
-		});
-	};
-
-	$scope.logout = function() {
-		ezfb.logout(function() {
-			updateLoginStatus(updateApiMe);
-		});
-	};
-
-	var autoToJSON = [ 'loginStatus', 'apiMe', ];
-	angular.forEach(autoToJSON, function(varName) {
-		$scope.$watch(varName, function(val) {
-			$scope[varName + 'JSON'] = JSON.stringify(val, null, 2);
-		}, true);
-	});
-
-	function updateLoginStatus(more) {
+	
+	function updateLoginStatus() {
 		ezfb.getLoginStatus(function(res) {
-			$scope.loginStatus = res;
-			(more || angular.noop)();
-			if (res.authResponse) {
-				$scope.logStatus = "Sair";
+			if(res.authResponse){
+				console.log(res);
+				console.log(res.authResponse.userID);
+				console.log("res.name =" + res.authResponse.userID);
+				console.log("res.id =" + res.authResponse.userID);
+				
+				var data = '{ "nome" : ' + res.authResponse.userID    +
+							', "senha" : '  + res.authResponse.userID +
+							', "email" : ' + res.authResponse.userID  + '}';
+				
+				console.log("data =" + data);
+					//$http.post("http://localhost:8080/NullServer/usuario/logarFace", data
+					$http.post("http://rcisistemas.minivps.info:8080/NullServer/usuario/logarFace", data
+					).success(function(data) {
+						if (data.idUsuario != null) {
+							window.sessionStorage.setItem("idUsuario", data.idUsuario);
+							id_usuario_null_pointer = data.idUsuario;
+							window.location.reload();
+						}
+					});
+				
+			}else{
+				console.log("Não esta logando no Face!!!");
 			}
 		});
 	}
-
+	
+	
 	function updateApiMe() {
 		ezfb.api('/me', function(res) {
 			$scope.apiMe = res;
@@ -184,9 +156,8 @@ serviceApp.controller('controller_teste', function($scope, usuarioService,ezfb, 
 			"senha" : senha,
 			"email" : email
 		};
-		// var promise_post =
-		// $http.post('http://rcisistemas.minivps.info:8080/NullServer/usuario/addUser');
-		$http.post("http://localhost:8080/NullServer/usuario/addUser", {usuario : data}).success(
+		//$http.post("http://localhost:8080/NullServer/usuario/addUser", {usuario : data}).success(
+		$http.post("http://rcisistemas.minivps.info:8080/NullServer/usuario/addUser", {usuario : data}).success(
 				function(data) {
 					if (data.idUsuario != null) {
 						window.sessionStorage.setItem("idUsuario", data.idUsuario);
@@ -227,7 +198,7 @@ serviceApp.controller('controller_teste', function($scope, usuarioService,ezfb, 
 serviceApp.controller('detalheDenunciaController', function($scope,$routeParams, $http, ezfb, $window) {
 	$scope.init = function() {
 		if (window.sessionStorage.getItem('idUsuario') != null) {
-			id_usuario_null_pointer = "disconected"
+			id_usuario_null_pointer = window.sessionStorage.getItem('idUsuario');
 		} else {
 			id_usuario_null_pointer = 0;
 		}
@@ -241,7 +212,7 @@ serviceApp.controller('detalheDenunciaController', function($scope,$routeParams,
 	var param1 = $routeParams.param1;
 	$scope.idDenuncia = param1;
 	if (param1 != null) {
-		$http.get("http://localhost:8080/NullServer/viewDetalheDenuncia/"+ param1).success(
+		$http.get("http://localhost:8080/NullServer/viewDetalheDenuncia/site/"+ param1).success(
 				function(data) {
 					// $http.get("http://rcisistemas.minivps.info:8080/NullServer/viewDetalheDenuncia/"
 					// + param1).success(function (data) {
@@ -299,12 +270,25 @@ serviceApp.controller('detalheDenunciaController', function($scope,$routeParams,
 						console.log("lisImagem.caminho = "
 								+ lisImagem[i].caminho);
 						$scope.caminhoImagem = lisImagem[i].caminho;
+						$scope.addSlide(lisImagem[i].caminho);
 					}
 				});
 	} else {
 		console.log("param1 iqual a nullo");
 	}
 	$scope.teste = "detalheDenunciaController!!!";
+	
+	var slides = $scope.slides = [ ];
+	  $scope.addSlide = function(caminho_imagem) {
+		  console.log("$scope.addSlide = function()");
+		if(caminho_imagem != "" ){
+			console.log("caminho_imagem_upload != vazio");
+			var newWidth = 600 + slides.length + 1;
+		    slides.push({
+		    			  image: caminho_imagem
+		    		})
+		}
+	  };
 });
 
 serviceApp.controller("GenericChartCtrl",
@@ -329,8 +313,8 @@ serviceApp.controller("GenericChartCtrl",
 		// (data) {
 		$http({
 				method : 'GET', // support GET, POST, PUT, DELETE
-				//url : 'http://rcisistemas.minivps.info:8080/NullServer/viewMap/quantidade',
-				url : 'http://localhost:8080/NullServer/viewMap/quantidade',
+				url : 'http://rcisistemas.minivps.info:8080/NullServer/viewMap/quantidade',
+				//url : 'http://localhost:8080/NullServer/viewMap/quantidade',
 				params : data, // GET method query string
 				data : data,
 				headers : {
@@ -418,23 +402,27 @@ serviceApp.controller('controller_login', function($scope, usuarioService,
 		ezfb, $window, $location, $http, $routeParams) {
 	$scope.init = function() {
 		if (window.sessionStorage.getItem('idUsuario') != null) {
+			id_usuario_null_pointer = window.sessionStorage.getItem('idUsuario');
+			$scope.logStatus = "Sair";
+			$scope.log = false;
+		} else {
+			id_usuario_null_pointer = 0;
 			$scope.logStatus = "Logar";
 			$scope.log = true;
-			$scope.logout();
-			window.sessionStorage.clear();
-			id_usuario_null_pointer = 0;
-			window.location.reload();
-			$window.location.href = '#/log/1';
-		}else{
-			$scope.logStatus = "Logar";
-			$scope.log = true;
-			id_usuario_null_pointer = 0;
 		}
 		if($routeParams.param1 != null && $routeParams.param1  == 1){
 			$scope.avisoDeslocado = true;
 		}else{
 			$scope.avisoDeslocado = false;
 		}
+		
+		$scope.deslocarApp = function(){
+			window.sessionStorage.clear();
+			id_usuario_null_pointer = 0;
+			$scope.logout();
+			window.location.reload();
+			$window.location.href = '#/log/1';
+		};
 		
 	}
 	
@@ -448,8 +436,8 @@ serviceApp.controller('controller_login', function($scope, usuarioService,
 			"email" : $scope.email
 		};
 
-		// $http.post('http://rcisistemas.minivps.info:8080/NullServer/usuario/addUser');
-		$http.post("http://localhost:8080/NullServer/usuario/logar", {
+		//$http.post("http://localhost:8080/NullServer/usuario/logar", {
+		$http.post("http://rcisistemas.minivps.info:8080/NullServer/usuario/logar", {
 			usuario : data
 		}).success(function(data) {
 			if (data.idUsuario != null) {
@@ -475,22 +463,20 @@ serviceApp.controller('controller_login', function($scope, usuarioService,
 
 	$scope.login = function() {
 		ezfb.login(function(res) {
-			if (res.authResponse) {
-				updateLoginStatus(updateApiMe);
-				var nomeUsuario = res.name;
-				var email = res.name;
-				var senha = res.id;
+			if(res.authResponse){
+				console.log(res);
+				console.log(res.authResponse.userID);
+				console.log("res.name =" + res.authResponse.userID);
+				console.log("res.id =" + res.authResponse.userID);
 				
-				var data = {
-						"nome" : nomeUsuario,
-						"senha" : senha,
-						"email" : email
-					};
-					
-					// $http.post('http://rcisistemas.minivps.info:8080/NullServer/usuario/addUser');
-					$http.post("http://localhost:8080/NullServer/usuario/addUser", {
-						usuario : data
-					}).success(function(data) {
+				var data = '{ "nome" : ' + res.authResponse.userID    +
+							', "senha" : '  + res.authResponse.userID +
+							', "email" : ' + res.authResponse.userID  + '}';
+				
+				console.log("data =" + data);
+					//$http.post("http://localhost:8080/NullServer/usuario/logarFace", data
+					$http.post("http://rcisistemas.minivps.info:8080/NullServer/usuario/logarFace", data
+					).success(function(data) {
 						if (data.idUsuario != null) {
 							window.sessionStorage.setItem("idUsuario", data.idUsuario);
 							id_usuario_null_pointer = data.idUsuario;
