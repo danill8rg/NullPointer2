@@ -292,6 +292,23 @@ serviceApp.controller('detalheDenunciaController', function($scope,$routeParams,
 		    		})
 		}
 	  };
+	  
+	  $scope.share = function () {
+		    ezfb.ui(
+		      {
+		        method: 'feed',
+		        name: 'angular-easyfb API demo',
+		        picture: 'http://plnkr.co/img/plunker.png',
+		        link: 'http://rcisistemas.minivps.info:8080/NullPointer/#/denuncia/detalhe/' + param1,
+		        description: 'angular-easyfb is an AngularJS module wrapping Facebook SDK.' + 
+		                     ' Facebook integration in AngularJS made easy!' + 
+		                     ' Please try it and feel free to give feedbacks.'
+		      },
+		      function (res) {
+		        // res: FB.ui response
+		      }
+		    );
+		  };
 });
 
 serviceApp.controller("GenericChartCtrl",
