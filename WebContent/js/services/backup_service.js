@@ -1,3 +1,7 @@
+//var var_site1 = "http://rcisistemas.minivps.info:8080";
+
+var var_site1 = "http://localhost:8080";
+
 /**
  * 
  */
@@ -40,7 +44,7 @@ serviceApp.service('usuarioService', function($http) {
   };
   
   
-  var promise = $http.get("http://rcisistemas.minivps.info:8080/NullServer/usuario/all");  
+  var promise = $http.get(var_site + "/NullServer/usuario/all");  
   promise.success(function(value) {  
      console.log(value);
      for (i = 0; i < value.length; i++) { 
@@ -74,7 +78,7 @@ serviceApp.controller('controller_teste', function($scope, usuarioService) {
 	$scope.alterarTexto = function() {
 		  $http({
 		        method: 'GET',
-		        url: 'http://rcisistemas.minivps.info:8080/NullServer/usuario/all'
+		        url: var_site + '/NullServer/usuario/all'
 		    })
 		    .sucess (function (data, status, headers, config) {
 		    	$scope.texto = "beleza";

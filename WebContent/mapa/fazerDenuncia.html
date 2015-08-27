@@ -6,11 +6,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Fazer Denuncia</title>
 
-<!-- Google fonts -->
-<link href='http://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
-
 <!-- font awesome -->
-<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+<link href="../js/font-awesome.min.css" rel="stylesheet">
 
 <!-- bootstrap -->
 <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css" />
@@ -39,9 +36,9 @@
   <script src="../js/services/service.js"></script>
   
   <!-- Angular js  Google Maps -->
-   <script src='//maps.googleapis.com/maps/api/js?sensor=false'></script>
+   <script src='../js/maps.googleapis.com.maps.api.js'></script>
    
-   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-route.min.js"></script>
+   <script src="../angular/angular-route.js"></script>
    
    <script src="../angular/angular-google-maps.min.js"></script>
    <script src="../angular/lodash.js"></script>
@@ -51,14 +48,14 @@
    <link rel="stylesheet" type="text/css" href="../css/styleNullPointer.css" >
    
    
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.8.0/codemirror.min.css">
-  <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.8.0/codemirror.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.8.0/mode/htmlmixed/htmlmixed.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.8.0/mode/htmlembedded/htmlembedded.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.8.0/mode/xml/xml.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.8.0/mode/javascript/javascript.min.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular-animate.js"></script>
-  <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.13.3.js"></script>
+  <link rel="stylesheet" href="../js/codemirror.min.css">
+  <script src="../js/codemirror.min.js"></script>
+  <script src="../js/htmlmixed.min.js"></script>
+  <script src="../js/htmlembedded.min.js"></script>
+  <script src="../js/xml.min.js"></script>
+  <script src="../js/javascript.min.js"></script>
+  <script src="../js/angular-animate.js"></script>
+  <script src="../js/ui-bootstrap-tpls-0.13.3.js"></script>
    
 </head>
 
@@ -105,13 +102,13 @@
 <!-- #Header Starts -->
 <
 <!-- works -->
-<div id="works" class="container" style=height: 100%!important;">
+<div  class="container" style=height: 100%!important;">
  	<h2 class="text-center">Fazer Denuncia</h2>
- 	<div >
-		  <div style="height: 100%!important">
+ 	<div id="works">
+		  <div class="container" style="width: 70%; height: 60%;">
 		    <carousel interval="myInterval" no-wrap="noWrapSlides">
 		      <slide ng-repeat="slide in slides" active="slide.active">
-		        <img ng-src="{{slide.image}}" style="margin:auto;">
+		        <img ng-src="{{slide.image}}" style="margin:auto; ">
 		        <div class="carousel-caption">
 		          <h4>Slide {{$index}}</h4>
 		          <p>{{slide.text}}</p>
@@ -198,10 +195,10 @@
 <div class="footer text-center spacer">
 Copyright 2015 NullPointer Creative Studio. All rights reserved.
 </div>
-<!-- # Footer Ends -->
+<!-- # Footer Ends
 <a href="#works" class="gototop "><i class="fa fa-angle-up  fa-3x"></i></a>
 
-
+ -->
 
 
 

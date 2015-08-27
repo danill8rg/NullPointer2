@@ -1,3 +1,10 @@
+var var_site2 = "http://rcisistemas.minivps.info:8080";
+
+/*var var_site2 = "http://localhost:8080";*/
+
+//0 = desconectado;
+var id_usuario_null_pointer = 0;
+
 'use strict';
 angular.module("angular-google-maps-example", ['uiGmapgoogle-maps', 'ngFileUpload', 'ui.bootstrap', 'ngRoute'])
 
@@ -55,19 +62,20 @@ angular.module("angular-google-maps-example", ['uiGmapgoogle-maps', 'ngFileUploa
 	var millisecondsToWait = 5000;
 	setTimeout(function() {
 		//$http.get("http://localhost:8080/NullServer/viewMap").success(function (data) {
-		$http.get("http://rcisistemas.minivps.info:8080/NullServer/viewMap").success(function (data) {	
+		$http.get(var_site2 + "/NullServer/viewMap").success(function (data) {
+			console.log(var_site2 + "/NullServer/viewMap" + "consultou");	
 		for (i = 0; i < data.length; i++) { 
 				var tipoMarcador = '';
 				if(data[i].tipoDenuncia == 'Drogas'){
-					tipoMarcador = 'http://rcisistemas.minivps.info:8080/NullPointer/images/ic_location_green.png';
+					tipoMarcador = var_site2 +'/NullPointer/images/ic_location_green.png';
 				}else{
 					if(data[i].tipoDenuncia == 'Alcool'){
-						tipoMarcador = 'http://rcisistemas.minivps.info:8080/NullPointer/images/ic_location_blue.png';
+						tipoMarcador = var_site2 +'/NullPointer/images/ic_location_blue.png';
 					}else{
 						if(data[i].tipoDenuncia == 'Assalto'){
-							tipoMarcador = 'http://rcisistemas.minivps.info:8080/NullPointer/images/ic_location_rosa.png';
+							tipoMarcador = var_site2 + '/NullPointer/images/ic_location_rosa.png';
 						}else{
-							tipoMarcador = 'http://rcisistemas.minivps.info:8080/NullPointer/images/ic_location_yellow.png';
+							tipoMarcador = var_site2 + '/NullPointer/images/ic_location_yellow.png';
 						}
 					}
 				}
@@ -101,9 +109,7 @@ angular.module("angular-google-maps-example", ['uiGmapgoogle-maps', 'ngFileUploa
 	}, millisecondsToWait);
 	
 	
-	$scope.link = "http://www.w3schools.com/html/";
-	//$http.get("http://rcisistemas.minivps.info:8080/NullServer/viewMap").success(function (data) {
-         
+	$scope.link = "http://www.w3schools.com/html/";     
 	console.log("teste");	
 	console.log("mapa criado");
 }])
@@ -266,7 +272,7 @@ angular.module("angular-google-maps-example", ['uiGmapgoogle-maps', 'ngFileUploa
          
          $scope.gerarDenuncia = function () {
         	 if(id_usuario_null_pointer == 0){
-        		 $scope.addAlert2("Você não está Logado, se continuar criará uma denúncia anônima e não terá permissão para edita-lá posteriomente! Clique em Fazer Denuncia para continuar e fazer a denúncia anônima.");
+        		 $scope.addAlert2("Você não está Logado, será registrado como uma denúncia anônima.");
         		 id_usuario_null_pointer = 1;
         	 }
         	 
@@ -316,10 +322,13 @@ angular.module("angular-google-maps-example", ['uiGmapgoogle-maps', 'ngFileUploa
      				};
             	 
             	 //$http.post("http://localhost:8080/NullServer/denuncia/denuncia_site", {denuncia : data}).success(
-            	 $http.post("http://rcisistemas.minivps.info:8080/NullServer/denuncia/denuncia_site", {denuncia : data}).success(	
+            	 $http.post(var_site2 + "/NullServer/denuncia/denuncia_site", {denuncia : data}).success(	
             	 function(data) {
- 							console.log("Salvo com Sucesso era para redirecionar");
- 							$window.location.href = '/NullPointer/mapa/mapa.html';
+            		 		if(data.idDenuncia == null){
+            		 			$window.location.href = '/NullPointer/#/denuncia/detalhe/' + data.idDenuncia;
+            		 		}else{
+            		 			$window.location.href = '/NullPointer/mapa/mapa.html';
+            		 		}
  						}).error(function(data){
  							console.log("Erro ao salvar Denuncia");
  							 $scope.addAlert2("Ocorreu algum erro ao salvar a denúncia. Por gentliza contacte o e-mail: danill8rg@gmail.com e avise. Tente registrar a Denúncia posteriomente. Desculpe pelo transtorno e estarei resolvensdo o problema assim que possível.");
@@ -381,7 +390,7 @@ angular.module("angular-google-maps-example", ['uiGmapgoogle-maps', 'ngFileUploa
          function uploadUsing$http(file) {
            file.upload = Upload.http({
              //url: 'http://localhost:8080/NullServer/img/fileupload' + $scope.getReqParams(),
-        	  url: 'http://rcisistemas.minivps.info:8080/NullServer/img/fileupload' + $scope.getReqParams(),
+        	  url: var_site2 + '/NullServer/img/fileupload' + $scope.getReqParams(),
         	  method: 'POST',
              headers: {
                'Content-Type': "multipart/form-data"
@@ -399,6 +408,7 @@ angular.module("angular-google-maps-example", ['uiGmapgoogle-maps', 'ngFileUploa
             	 caminho_imagem_upload = "" + object.caminho;
             	 $scope.addSlide();
             	 $scope.picFile = null;
+            	 $scope.picFile = "";
              }else{
             	 console.log("statu deu merda!" + response.status);
             	 $scope.errorMsg = response.status + ': ' + response.data;
@@ -528,6 +538,3 @@ angular.module("angular-google-maps-example", ['uiGmapgoogle-maps', 'ngFileUploa
          });
          
 }])
-
-//0 = desconectado;
-var id_usuario_null_pointer = 0;
