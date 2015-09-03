@@ -15,6 +15,9 @@ serviceApp.config([ '$routeProvider', 'ezfbProvider',
 			}).when('/usuario/create', {
 				templateUrl : 'usuario/create.html',
 				controller : 'controller_create'
+			}).when('/lembrar_senha', {
+				templateUrl : 'usuario/senha.html',
+				controller : 'controller_senha'
 			}).when('/usuario/conta', {
 				templateUrl : 'usuario/ContaUsuario.html',
 				controller : 'controller_teste'
@@ -695,4 +698,40 @@ serviceApp.controller('controller_create', function($scope, usuarioService,
 			$scope.emailValido = true;
 		});
 	}
+});
+
+serviceApp.controller('controller_senha', function($scope, usuarioService,
+		ezfb, $window, $location, $http, $routeParams) {
+	$scope.mensagemErro = false;
+	$scope.mensagemAviso = false;
+	
+	$scope.init = function() {
+		if (window.sessionStorage.getItem('idUsuario') != null) {
+			id_usuario_null_pointer = window.sessionStorage.getItem('idUsuario');
+			$scope.logStatus = "Sair";
+		} else {
+			$scope.logStatus = "Logar";
+			id_usuario_null_pointer = 0;
+		}
+	}
+	$scope.init();
+	$scope.avisoUser = false;
+	
+	$scope.mensagem = function(mensagem) {
+		$scope.texto = mensagem;
+		$scope.mensagemAviso = true;
+	};
+
+	$scope.relembraSenha = function() {
+		$http.post(var_site + "/NullServer/usuario/lembrar_senha", {email : $scope.email}).success(
+				function(data) {
+					if (data.mensagem != null) {
+						$scope.mensagem(data.mensagem);
+					} else {
+						$scope.mensagemErro = true;
+						console.log("Erro ao salvar usuário!!! ");
+					}
+				});
+	};
+
 });

@@ -1,0 +1,35 @@
+<meta charset="UTF-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<div class="container" style="height: 500px !important">
+</br>
+	<h3 class="text-center">Relembrar Senha</h3>
+<form name="userForm" ng-submit="submitForm(userForm.$valid)" novalidate>                 
+      <!-- EMAIL -->
+      <div class="form-group">
+         <label>Informe o E-mail cadastrado.</label>
+         <div class="alert alert-danger help-block" ng-show="userForm.email.$invalid && !userForm.email.$pristine"  role="alert">Informe um e-mail válido.</div>
+         <input type="email" name="email" class="form-control center-block" ng-model="email" required style="width: 65%;" >
+      </div>
+               
+ 	<div class="alert alert-danger help-block" ng-show="ver_mensagegem"  role="alert">{{mensagem}}</div>  
+     <!-- SUBMIT BUTTON -->
+     
+     <div class="alert alert-info" ng-show="mensagemErro"  >
+			  <button type="button" class="close" data-dismiss="alert">&times;</button>
+			  <h4>Erro ao Relembrar Senha!</h4>
+			  Ocorreu um erro ao relembrar senha.</br> 
+			  Por gentileza informe esse erro no e-mail: danill8rg@gmail.com </br>
+			  Por favor tente novamente mais tarde, que assim que possível,</br>
+			  estarei resolvendo o problema.
+	</div>
+	
+	<div class="alert alert-info" ng-show="mensagemAviso"  >
+			  <button type="button" class="close" data-dismiss="alert">&times;</button>
+			 {{texto}}
+	</div>
+     <div class="form-group">
+		 <a style="width: 15%;" class="btn btn-primary" href="#/home" role="button">Cancelar</a>
+    	 <button style="width: 15%;" type="submit" class="btn btn-primary"  ng-disabled="(userForm.$invalid)"  ng-click="relembraSenha()" >Enviar</button>  
+	 </div>
+</form>
+</div>
