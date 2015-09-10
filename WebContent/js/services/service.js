@@ -45,10 +45,16 @@ serviceApp.config([ '$routeProvider', 'ezfbProvider',
 			}).when('/grafico', {
 				templateUrl : 'grafico/grafico.html',
 				controller : 'GenericChartCtrl'
+			}).when('/404', {
+				redirectTo: function() {
+			        window.location = "/conexaocidada/mapa/mapa.html";
+			    }
 			}).
 
 			otherwise({
-				redirectTo : '/home'
+				redirectTo: function() {
+			        window.location = "/conexaocidada/mapa/mapa.html";
+			    }
 			});
 
 			ezfbProvider.setInitParams({
@@ -302,7 +308,7 @@ serviceApp.controller('detalheDenunciaController', function($scope,$routeParams,
 		        method: 'feed',
 		        name: 'angular-easyfb API demo',
 		        picture: 'http://plnkr.co/img/plunker.png',
-		        link: 'http://rcisistemas.minivps.info:8080/NullPointer/#/denuncia/detalhe/' + param1,
+		        link: 'http://rcisistemas.minivps.info:8080/conexaocidada/#/denuncia/detalhe/' + param1,
 		        description: 'angular-easyfb is an AngularJS module wrapping Facebook SDK.' + 
 		                     ' Facebook integration in AngularJS made easy!' + 
 		                     ' Please try it and feel free to give feedbacks.'

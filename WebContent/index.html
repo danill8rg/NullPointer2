@@ -2,12 +2,12 @@
 <html  lang="pt-br" ng-app="nullP">
 <head>
 <meta name="description" content="site para fazer senuncias e registrar locail de risco."> 
-<meta name="keywords" content="denuncia, anapolis, goias, ueg, reclamacao, mapa,google maps, imagem,nullpointer, ponto errado,brasil, mudanca, danillo, tcc"> 
+<meta name="keywords" content="conexao cidada, conexão, cidadania, cidadã,denuncia, anapolis, goias, ueg, reclamacao, mapa,google maps, imagem,nullpointer, ponto errado,brasil, mudanca, danillo, tcc"> 
 <meta name="author" content="Danillo Rodrigues Goncalves"> 
 <meta charset="UTF-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>NullPointer</title>
+<title>Conexão Cidadã</title>
 
 <!-- font awesome -->
 <link href="js/font-awesome.min.css" rel="stylesheet">
@@ -53,7 +53,7 @@
           <div class="container">
             <div class="navbar-header">
               <!-- Logo Starts -->
-              <a style="height: 100%!important" class="navbar-brand" href="#home"><img src="images/logo.png" alt="logo"></a>
+              <a style="height: 100%!important" class="navbar-brand" href="/conexaocidada/mapa/mapa.html"><img src="images/logo.png" alt="logo"></a>
               <!-- #Logo Ends -->
 
 
@@ -70,11 +70,16 @@
             <!-- Nav Starts -->
             <div class="navbar-collapse  collapse">
               <ul class="nav navbar-nav navbar-right scroll">
-              		<li><a href="/NullPointer/mapa/fazerDenuncia.html">Fazer Denuncia</a></li>
-			      	<li><a href="/NullPointer/mapa/mapa.html">Mapa Denuncias</a></li>
+              		<li><a href="/conexaocidada/mapa/fazerDenuncia.html">Fazer Denuncia</a></li>
+			      	<li><a href="/conexaocidada/mapa/mapa.html">Mapa Denuncias</a></li>
 			      	<li><a href="#grafico">Gráficos</a></li>
-			      	<li><a href="#usuario/create">Novo Usuário</a></li>
-			      	<li><a href="#log">{{logStatus}}</a></li>
+			      	<li class="dropdown">
+			          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Usuário<span class="caret"></span></a>
+			          <ul class="dropdown-menu">
+			            <li><a href="#usuario/create">Novo Usuário</a></li>
+			      		<li><a href="#log">{{logStatus}}</a></li>
+			          </ul>
+			       </li>
               </ul>
             </div>
             <!-- #Nav Ends -->
@@ -93,7 +98,7 @@
 <!-- works -->
 <!-- Footer Starts -->
 <div class="footer text-center spacer">
-Copyright 2015 NullPointer.
+Copyright 2015 Conexâo Cidadã.
 </div>
 <!-- # Footer Ends 
 <a href="#works" class="gototop "><i class="fa fa-angle-up  fa-3x"></i></a>

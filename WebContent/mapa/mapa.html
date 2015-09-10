@@ -35,6 +35,8 @@
   <script src="../js/controller.js"></script>
   <script src="../js/services/service.js"></script>
   
+  <script src="../js/roundProgress.min.js"></script>
+  
   <!-- Angular js  Google Maps -->
     <script src='//maps.googleapis.com/maps/api/js?sensor=false'></script>
    <script src="../angular/angular-google-maps.min.js"></script>
@@ -42,8 +44,6 @@
    
    <script src="../js/mapaModulo.js"></script>
    
-   <link rel="stylesheet" type="text/css" href="../css/styleNullPointer.css" >
-
   <link rel="stylesheet" href="../js/codemirror.min.css">
   <script src="../js/codemirror.min.js"></script>
   <script src="../js/htmlmixed.min.js"></script>
@@ -66,7 +66,7 @@
           <div class="container">
             <div class="navbar-header">
               <!-- Logo Starts -->
-              <a style="height: 100%!important" class="navbar-brand" href="/NullPointer/#home"><img src="../images/logo.png" alt="logo"></a>
+              <a style="height: 100%!important" class="navbar-brand" ><img src="../images/logo.png" alt="logo"></a>
               <!-- #Logo Ends -->
              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
@@ -81,11 +81,16 @@
             <!-- Nav Starts -->
             <div class="navbar-collapse  collapse">
               <ul class="nav navbar-nav navbar-right scroll">
-              		<li><a href="/NullPointer/mapa/fazerDenuncia.html">Fazer Denuncia</a></li>
+              		<li><a href="/conexaocidada/mapa/fazerDenuncia.html">Fazer Denuncia</a></li>
               		<li><a href="#">Mapa Denuncias</a></li>
-              		<li><a href="/NullPointer/#/grafico">Grafico</a></li>
-                	<li><a href="/NullPointer/#/usuario/create">Novo Usuário</a></li>
-                	<li><a href="/NullPointer/#/log">{{logStatus}}</a></li>
+              		<li><a href="/conexaocidada/#/grafico">Grafico</a></li>
+                	<li class="dropdown">
+			          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Usuário<span class="caret"></span></a>
+			          <ul class="dropdown-menu">
+			            <li><a href="/conexaocidada/#/usuario/create">Novo Usuário</a></li>
+                		<li><a href="/conexaocidada/#/log">{{logStatus}}</a></li>
+			          </ul>
+			          </li>
               </ul>
             </div>
             <!-- #Nav Ends -->
@@ -96,9 +101,29 @@
       </div>
     </div>
 <!-- #Header Starts -->
-
+</br>
+</br>
 <!-- works -->
-<div id="works" > 
+<div id="works" class="container" > 
+<div ng-show="progress" class="container" style="width: 20%!important; height: 20%!important" >
+    <div class="progress-wrapper" >
+            <div ng-style="getStyle()" 
+                round-progress
+                max="59"
+                current="timerCurrent"
+                color="{{ getColor() }}"
+                bgcolor="{{ bgColor }}"
+                radius="{{ radius }}"
+                semi="isSemi"
+                rounded="rounded"
+                clockwise="clockwise"
+                responsive="true"
+                stroke="{{ stroke }}"
+                animation="{{ currentAnimation }}"
+                style="margin: 0 auto!important;width: 50%!important;"></div>
+        </div>
+        </br>
+ </div>
    <ui-gmap-google-map center='map.center' zoom='map.zoom'>
  			<ui-gmap-marker ng-repeat="m in map.markers" icon="m.icon" coords="m.coords" 
  				click="map.onMarkerClick(m)" idkey="m.id"  events="markersEvents" >
@@ -108,7 +133,7 @@
                         Latitude: {{m.coords.latitude}}<br/>
                         Longitude: {{m.coords.longitude}}<br/>
                         <br/><br/>
-                        <a href="/NullPointer/#/denuncia/detalhe/{{m.id}}">Detalhes Denuncia</a>
+                        <a href="/conexaocidada/#/denuncia/detalhe/{{m.id}}">Detalhes Denuncia</a>
                     </p>
                     <p>
                     </p>
@@ -117,6 +142,9 @@
        
     </ui-gmap-google-map>
 </div>
+</br>
+</br>
+</br>
 <!-- works -->
 
 
@@ -124,7 +152,7 @@
 
 <!-- Footer Starts -->
 <div class="footer text-center spacer">
-Copyright 2015 NullPointer Creative Studio. All rights reserved.
+Copyright 2015 Conexão Cidadã. All rights reserved.
 </div>
 <!-- # Footer Ends 
 <a href="#works" class="gototop "><i class="fa fa-angle-up  fa-3x"></i></a>
@@ -168,6 +196,8 @@ Copyright 2015 NullPointer Creative Studio. All rights reserved.
 <script src="../assets/script.js"></script>
 
 <!-- ng-file script -->
+<script src="../js/angular-thread.min.js"></script>
+
 <script src="../js/ng-file/ng-file-upload.min.js"></script>
 <script src="../js/ng-file/ng-file-upload-shim.min.js"></script>
 </body>

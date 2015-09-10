@@ -70,10 +70,39 @@
   fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));</script>
 
-<div class="fb-share-button" data-href="http://rcisistemas.minivps.info:8080/NullPointer/#/denuncia/detalhe/{{idDenuncia}}" data-layout="button_count"></div>
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '458662504316602',
+      xfbml      : true,
+      version    : 'v2.4'
+    });
+  };
 
-<div class="container">
-	<div class="container center-block">
-      <div class="fb-comments" data-href="http://rcisistemas.minivps.info:8080/NullPointer/#/denuncia/detalhe/{{idDenuncia}}" data-numposts="10"  data-width="600" data-colorscheme="light"></div>
-    </div>
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<div
+  class="fb-like"
+  data-share="true"
+  data-width="450"
+  data-show-faces="true">
 </div>
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/pt_BR/sdk.js#xfbml=1&version=v2.4&appId=458662504316602";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+<div class="fb-comments" data-href="http://rcisistemas.minivps.info:8080/conexaocidada/#/denuncia/detalhe/{{idDenuncia}}" data-width="600" data-numposts="10"></div>

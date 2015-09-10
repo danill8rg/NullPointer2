@@ -1,12 +1,12 @@
 var var_site2 = "http://rcisistemas.minivps.info:8080";
 
-/*var var_site2 = "http://localhost:8080";*/
+//var var_site2 = "http://localhost:8080";
 
 //0 = desconectado;
 var id_usuario_null_pointer = 0;
 
 'use strict';
-angular.module("angular-google-maps-example", ['uiGmapgoogle-maps', 'ngFileUpload', 'ui.bootstrap', 'ngRoute'])
+angular.module("angular-google-maps-example", ['uiGmapgoogle-maps', 'ngFileUpload', 'ui.bootstrap', 'ngRoute', 'angular-svg-round-progress'])
 
 .value("rndAddToLatLon", function () {
 	return Math.floor(((Math.random() < 0.5 ? -1 : 1) * 2) + 1);
@@ -24,9 +24,10 @@ angular.module("angular-google-maps-example", ['uiGmapgoogle-maps', 'ngFileUploa
 	$templateCache.put('control.tpl.html', '<button class="btn btn-sm btn-primary" ng-class="{\'btn-warning\': danger}" ng-click="controlClick()">{{controlText}}</button>');
 }])
 
-.controller("mapCtrl", ["$scope", "uiGmapLogger", "uiGmapObjectIterators", '$http',
-	function ($scope, logger, uiGmapObjectIterators, $http) {
-	 $scope.init = function(){                   
+.controller("mapCtrl", ["$scope", "uiGmapLogger", "uiGmapObjectIterators", '$http','$interval', 'roundProgressService',
+	function ($scope, logger, uiGmapObjectIterators, $http , $interval, roundProgressService) {
+	 $scope.init = function(){ 
+		 iniciarServidor();
 		if(window.sessionStorage.getItem('idUsuario') != null){
 			id_usuario_null_pointer = "disconected"
 		}else{
@@ -38,7 +39,14 @@ angular.module("angular-google-maps-example", ['uiGmapgoogle-maps', 'ngFileUploa
 			$scope.logStatus = "Logar";
 		}
 	}
+	 
+	 iniciarServidor = function(){ 
+		 $http.get(var_site2 + "/conexaocidada/ServletMarcadores").success(function (data) {
+		 });
+	 }
+	 
 	$scope.init();
+	$scope.progress = false;
 	var i = 0;
 	var lastId = 1;
 	var clusterThresh = 6;
@@ -59,34 +67,62 @@ angular.module("angular-google-maps-example", ['uiGmapgoogle-maps', 'ngFileUploa
 	var initMap = function(){            
 	}
 	initMap();
-	var millisecondsToWait = 5000;
+	var millisecondsToWait = 3000;
 	setTimeout(function() {
+		$scope.progress = true;
 		//$http.get("http://localhost:8080/NullServer/viewMap").success(function (data) {
-		$http.get(var_site2 + "/NullServer/viewMap").success(function (data) {
-			console.log(var_site2 + "/NullServer/viewMap" + "consultou");	
+		$http.get(var_site2 + "/conexaocidada/ServletMarcadores?tipo=1").success(function (data) {
 		for (i = 0; i < data.length; i++) { 
 				var tipoMarcador = '';
-				if(data[i].tipoDenuncia == 'Drogas'){
-					tipoMarcador = var_site2 +'/NullPointer/images/ic_location_green.png';
-				}else{
-					if(data[i].tipoDenuncia == 'Alcool'){
-						tipoMarcador = var_site2 +'/NullPointer/images/ic_location_blue.png';
-					}else{
-						if(data[i].tipoDenuncia == 'Assalto'){
-							tipoMarcador = var_site2 + '/NullPointer/images/ic_location_rosa.png';
-						}else{
-							tipoMarcador = var_site2 + '/NullPointer/images/ic_location_yellow.png';
-						}
-					}
+				switch(data[i].tipoDenuncia){
+					case "Nao foi Definido": {
+						tipoMarcador = var_site2 +'/conexaocidada/images/marker/dot1.png';
+					}break;
+					case "Drogas":{
+						tipoMarcador = var_site2 +'/conexaocidada/images/marker/dot2.png';
+					}break;
+					case "Assalto": {
+						tipoMarcador = var_site2 +'/conexaocidada/images/marker/dot3.png';
+					}break;
+					case "Alcool": {
+						tipoMarcador = var_site2 +'/conexaocidada/images/marker/dot4.png';
+					}break;
+					case "Assassinato": {
+						tipoMarcador = var_site2 +'/conexaocidada/images/marker/dot5.png';
+					}break;
+					case "Acidente de Transito": {
+						tipoMarcador = var_site2 +'/conexaocidada/images/marker/dot6.png';
+					}break;
+					case "Buraco na Rua": {
+						tipoMarcador = var_site2 +'/conexaocidada/images/marker/dot7.png';
+					}break;
+					case "Desaparecimento de Pessoa": {
+						tipoMarcador = var_site2 +'/conexaocidada/images/marker/dot8.png';
+					}break;
+					case "Luz de Poste Desligada": {
+						tipoMarcador = var_site2 +'/conexaocidada/images/marker/dot9.png';
+					}break;
+					case "Roubo de Automovel": {
+						tipoMarcador = var_site2 +'/conexaocidada/images/marker/dot10.png';
+					}break;
+					case "Roubo de Celular": {
+						tipoMarcador = var_site2 +'/conexaocidada/images/marker/dot11.png';
+					}break;
+					case "Excesso de Barulho": {
+						tipoMarcador = var_site2 +'/conexaocidada/images/marker/dot12.png';
+					}break;
+					default : {
+						tipoMarcador = var_site2 +'/conexaocidada/images/marker/dot13.png';
+					}break;
 				}
-				console.log("tipoMarcador = " +  tipoMarcador);
-				var image = "https://maps.google.com/mapfiles/kml/shapes/info-i_maps.png";
 				var marker = {
 					title: "Tipo da Denuncia: " + data[i].tipoDenuncia + " ",
 					id: data[i].idDenuncia,
 					icon: {
-						url:tipoMarcador
-					},
+					    url:tipoMarcador,
+					    scaledSize: new google.maps.Size(40, 40), // scaled size
+					    origin: new google.maps.Point(0,0), // origin
+					    anchor: new google.maps.Point(0, 0)},
 					time: "12:00PM",
 					coords: {
 						latitude: data[i].latitude,
@@ -104,14 +140,67 @@ angular.module("angular-google-maps-example", ['uiGmapgoogle-maps', 'ngFileUploa
 					show: false
 				};
 				$scope.map.markers.push(marker);
+				$scope.progress = false;
 			}
 		});   
 	}, millisecondsToWait);
 	
 	
-	$scope.link = "http://www.w3schools.com/html/";     
 	console.log("teste");	
 	console.log("mapa criado");
+	
+	$scope.current =        27;
+    $scope.max =            50;
+    $scope.timerCurrent =   0;
+    $scope.uploadCurrent =  0;
+    $scope.stroke =         15;
+    $scope.radius =         125;
+    $scope.isSemi =         false;
+    $scope.rounded =        false;
+    $scope.responsive =     true;
+    $scope.clockwise =      true;
+    $scope.currentColor =   '#45ccce';
+    $scope.bgColor =        '#eaeaea';
+    $scope.duration =       800;
+    $scope.currentAnimation = 'easeOutCubic';
+
+    $scope.increment = function(amount){
+        $scope.current+=(amount || 1);
+    };
+
+    $scope.decrement = function(amount){
+        $scope.current-=(amount || 1);
+    };
+
+    $scope.animations = [];
+
+    angular.forEach(roundProgressService.animations, function(value, key){
+        $scope.animations.push(key);
+    });
+
+    $scope.getStyle = function(){
+        return {
+        	'display' : "block!important",
+        	'margin-right' : "auto!important",
+        	'margin-left': 'auto!important'
+        };
+    };
+
+    $scope.getColor = function(){
+        return $scope.gradient ? 'url(#gradient)' : $scope.currentColor;
+    };
+
+    var getPadded = function(val){
+        return val < 10 ? ('0' + val) : val;
+    };
+
+    $interval(function(){
+        var date = new Date();
+        var secs = date.getSeconds();
+
+        $scope.timerCurrent = secs;
+        $scope.time = getPadded(date.getHours()) + ':' + getPadded(date.getMinutes()) + ':' + getPadded(secs);
+    }, 1000);
 }])
 
 .controller("mapMarcar", ["$scope", "uiGmapLogger", "uiGmapObjectIterators", '$http',
@@ -325,9 +414,9 @@ angular.module("angular-google-maps-example", ['uiGmapgoogle-maps', 'ngFileUploa
             	 $http.post(var_site2 + "/NullServer/denuncia/denuncia_site", {denuncia : data}).success(	
             	 function(data) {
             		 		if(data.idDenuncia == null){
-            		 			$window.location.href = '/NullPointer/#/denuncia/detalhe/' + data.idDenuncia;
+            		 			$window.location.href = '/conexaocidada/#/denuncia/detalhe/' + data.idDenuncia;
             		 		}else{
-            		 			$window.location.href = '/NullPointer/mapa/mapa.html';
+            		 			$window.location.href = '/conexaocidada/mapa/mapa.html';
             		 		}
  						}).error(function(data){
  							console.log("Erro ao salvar Denuncia");

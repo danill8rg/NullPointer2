@@ -35,6 +35,9 @@
   <script src="../js/controller.js"></script>
   <script src="../js/services/service.js"></script>
   
+  <script src="../js/roundProgress.min.js"></script>
+  
+  
   <!-- Angular js  Google Maps -->
    <script src='//maps.googleapis.com/maps/api/js?sensor=false'></script>
    
@@ -44,9 +47,6 @@
    <script src="../angular/lodash.js"></script>
    
    <script src="../js/mapaModulo.js"></script>
-   
-   <link rel="stylesheet" type="text/css" href="../css/styleNullPointer.css" >
-   
    
   <link rel="stylesheet" href="../js/codemirror.min.css">
   <script src="../js/codemirror.min.js"></script>
@@ -65,12 +65,11 @@
 <!-- Header Starts -->
 <div class="navbar-wrapper">
       <div class="container">
-
         <div class="navbar navbar-default navbar-fixed-top" role="navigation" id="top-nav">
           <div class="container">
             <div class="navbar-header">
               <!-- Logo Starts -->
-              <a style="height: 100%!important" class="navbar-brand" href="/NullPointer/#home"><img src="../images/logo.png" alt="logo"></a>
+              <a style="height: 100%!important" class="navbar-brand" href="/conexaocidada/mapa/mapa.html"><img src="../images/logo.png" alt="logo"></a>
               <!-- #Logo Ends -->
              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
@@ -86,10 +85,15 @@
             <div class="navbar-collapse  collapse">
               <ul class="nav navbar-nav navbar-right scroll">
               		<li><a href="#">Fazer Denuncia</a></li>
-			      	<li><a href="/NullPointer/mapa/mapa.html">Mapa Denuncias</a></li>
-			      	<li><a href="/NullPointer/#/grafico">Grafico</a></li>
-			      	<li><a href="/NullPointer/#/usuario/create">Novo Usuário</a></li>
-                	<li><a href="/NullPointer/#/log">{{logStatus}}</a></li>
+			      	<li><a href="/conexaocidada/mapa/mapa.html">Mapa Denuncias</a></li>
+			      	<li><a href="/conexaocidada/#/grafico">Grafico</a></li>
+			      	<li class="dropdown">
+			          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Usuário<span class="caret"></span></a>
+			          <ul class="dropdown-menu">
+			            <li><a href="/conexaocidada/#/usuario/create">Novo Usuário</a></li>
+                		<li><a href="/conexaocidada/#/log">{{logStatus}}</a></li>
+			          </ul>
+			      	</li>
               </ul>
             </div>
             <!-- #Nav Ends -->
@@ -102,9 +106,9 @@
 <!-- #Header Starts -->
 <
 <!-- works -->
-<div  class="container" style=height: 100%!important;">
+<div  id="works" class="container" style=height: 100%!important;">
  	<h2 class="text-center">Fazer Denuncia</h2>
- 	<div id="works">
+ 	<div>
 		  <div class="container" style="width: 70%; height: 60%;">
 		    <carousel interval="myInterval" no-wrap="noWrapSlides">
 		      <slide ng-repeat="slide in slides" active="slide.active">
@@ -117,7 +121,7 @@
 		    </carousel>
 		  </div>
 		</div>
- </div>
+</div>
  
 <div id="about" class="container spacer about" style="height: 100%!important" >
 	<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
@@ -192,6 +196,7 @@
 	 <div class="container center-block">
 	  	 <alert ng-repeat="alert2 in alerts2" type="{{alert2.type}}" close="closeAlert2($index)">{{alert2.msg}}</alert>
 	 	 <button type="submit" class="btn btn-primary" style="width:25%; display: block;margin-right: auto;margin-left: auto;" ng-disabled="(userForm.$invalid)"  ng-click="gerarDenuncia()" >Fazer Denuncia</button>
+	 </br></br></br></br>
 	 </div>
 <!-- works -->
 
@@ -200,7 +205,7 @@
 
 <!-- Footer Starts -->
 <div class="footer text-center spacer">
-Copyright 2015 NullPointer Creative Studio. All rights reserved.
+Copyright 2015 Conexão Cidadã Creative Studio. All rights reserved.
 </div>
 <!-- # Footer Ends
 <a href="#works" class="gototop "><i class="fa fa-angle-up  fa-3x"></i></a>
