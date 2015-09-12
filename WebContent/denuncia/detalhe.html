@@ -4,11 +4,11 @@
 
 <div class="container">
 </br >
-	<div class="center-block" >
-		  <div  class="container"  style="width: 70%; height: 60%;>
+		<div class="center-block">
+		  <div class="container" style="width: 70%; height: 60%;">
 		    <carousel interval="myInterval" no-wrap="noWrapSlides">
 		      <slide ng-repeat="slide in slides" active="slide.active">
-		        <img ng-src="{{slide.image}}" style="margin:auto;">
+		        <img ng-src="{{slide.image}}" style="margin:auto; ">
 		        <div class="carousel-caption">
 		          <h4>Slide {{$index}}</h4>
 		          <p>{{slide.text}}</p>
@@ -95,14 +95,39 @@
   data-show-faces="true">
 </div>
 
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/pt_BR/sdk.js#xfbml=1&version=v2.4&appId=458662504316602";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
+<div id="about" class="container spacer about">
+	<div class="list-group">
+	  <a href="#" class="list-group-item active">
+	    <h4 class="list-group-item-heading text-center">Mensagens</h4>
+	  </a>
+	  <a ng-repeat="mensagem in men" class="list-group-item disable">
+	     <div class="row">
+		  	<div class="col-md-3">
+					<img style="width: 65px; height: 65px;" class="media-object img-circle center-block" src="{{men.caminhoimagem" alt="Imagem do Usuário!">
+			</div>
+		  	<div class="col-md-9">
+			  <p style="color: gray;"  class="list-group-item-heading text-left">{{men.nomeUsuario}}</p>
+	    	  <p class="list-group-item-text text-left">{{men.texto}}</p>
+	    	  <p class="list-group-item-text text-right">{{men.dataAdicionada}}</p>
+			</div>
+		</div>
+	 </a>
+	</div>
+</div>
+
+<div id="partners"  class="container spacer" style="width: 100%!important ;" >	
+	<form class="form-inline">
+	  <div class="form-group container">
+	    <label for="inputEmail3" class="col-sm-2 control-label">Add Mensagem</label>
+	    <div class="col-sm-10">
+	      <textarea style="width: 100%!important ;"  class="form-control" rows="3" placeholder="Escreva sua mensagem aqui..."></textarea>
+	    </div>
+	  </div>
+	  </br> </br>
+	  <button type="submit" class="btn btn-default">Enviar</button>
+	</form>
+</div>
 
 
-<div class="fb-comments" data-href="http://rcisistemas.minivps.info:8080/conexaocidada/#/denuncia/detalhe/{{idDenuncia}}" data-width="600" data-numposts="10"></div>
+
+

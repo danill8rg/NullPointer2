@@ -30,7 +30,8 @@ public class ServletMarcadores extends HttpServlet{
 	}
 	
 	private void setJsonResposta() {
-		String url = "http://rcisistemas.minivps.info:8080/NullServer/viewMap/web";			
+		//String url = "http://rcisistemas.minivps.info:8080/NullServer/viewMap/web";			
+		String url = "http://localhost:8080/NullServer/viewMap/web";			
 		URL obj;
 		try {
 			obj = new URL(url);
@@ -68,13 +69,14 @@ public class ServletMarcadores extends HttpServlet{
 		String tipo = request.getParameter("tipo");
 		PrintWriter out = response.getWriter();
 		if(tipo == null){
-			atualizar();
+			//atualizar();
 			out.println("ok");			
 		}else{
 			if(json_resposta != null){
 				out.println(json_resposta);
 			}else{
-				String url = "http://rcisistemas.minivps.info:8080/NullServer/viewMap/web";	
+				String url = "http://localhost:8080/NullServer/viewMap/web";
+				//String url = "http://rcisistemas.minivps.info:8080/NullServer/viewMap/web";	
 				URL obj;
 				try {
 					obj = new URL(url);
@@ -109,7 +111,8 @@ public class ServletMarcadores extends HttpServlet{
 	            	atualisarSetJsonResposta();
 	            }
 				private void atualisarSetJsonResposta() {
-					String url = "http://rcisistemas.minivps.info:8080/NullServer/viewMap/web";	
+					String url = "http://localhost:8080/NullServer/viewMap/web";
+					//String url = "http://rcisistemas.minivps.info:8080/NullServer/viewMap/web";	
 					URL obj;
 					try {
 						obj = new URL(url);

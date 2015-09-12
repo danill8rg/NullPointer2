@@ -110,7 +110,7 @@
    <div class="row">
         <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true">
 		
-		<ui-gmap-markers models="searchResults.results" coords="'coords'"  idkey="'key'"  fit='true'   icon="'icon'" events="markersEvents">
+		<ui-gmap-markers models="searchResults.results" coords="'coords'"  idkey="'key'"  icon="'icon'" click="'onClicked'" events="markersEvents">
                 <ui-gmap-windows show="'showWindow'" closeClick="'closeClick'" ng-cloak>
                     <p ng-non-bindable>This is an info window at {{ latitude | number:4 }}, {{ longitude | number:4 }}!</p>
                 </ui-gmap-windows>

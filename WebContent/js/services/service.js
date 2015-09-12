@@ -1,9 +1,9 @@
 // 0 = desconectado;
 var id_usuario_null_pointer = 0;
 
-var var_site = "http://rcisistemas.minivps.info:8080";
+//var var_site = "http://rcisistemas.minivps.info:8080";
 
-//var var_site = "http://localhost:8080";
+var var_site = "http://localhost:8080";
 
 var serviceApp = angular.module('nullP', [ 'ngRoute', 'googlechart', 'ezfb','hljs',  'ui.bootstrap' ]);
 
@@ -299,6 +299,7 @@ serviceApp.controller('detalheDenunciaController', function($scope,$routeParams,
 		    slides.push({
 		    			  image: caminho_imagem
 		    		})
+		    		caminho_imagem = "";
 		}
 	  };
 	  
@@ -318,6 +319,26 @@ serviceApp.controller('detalheDenunciaController', function($scope,$routeParams,
 		      }
 		    );
 		  };
+		  
+		  $scope.mensagem = [];
+		  
+	    var millisecondsToWait_lista = 2000;
+	  	setTimeout(function() {
+	  		$http.get(var_site + "/NullServer/mensagem/" + param1, {}).success(
+					function(data) {
+						console.log("data = " + data);
+						for (var aux = 0; aux < data.length; aux++) {
+							var mensage =  "caminhoimagem: " + data[aux].caminhoimagem +
+									",texto:" +  data[aux].texto +
+									",dataAdicionada:" +  data[aux].dataAdicionada +
+									",nomeUsuario: " + data[aux].nomeUsuario +
+									",idMensagem:"  + data[aux].idMensagem ;
+							$scope.mensagem.push(mensage);
+							console.log("$scope.mensagem = " + $scope.mensagem);
+						}
+					});
+	  	}, millisecondsToWait_lista);
+		  
 });
 
 serviceApp.controller("GenericChartCtrl",

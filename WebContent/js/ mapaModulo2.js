@@ -44,6 +44,9 @@ angular.module("angular-google-maps-example", ['uiGmapgoogle-maps', 'ngFileUploa
 	 
 	$scope.init();
 	
+	var callAtTimeout=function(){console.log("hi")}
+	$timeout(callAtTimeout,3000);
+	
     var lastId = 1;
     
     $scope.cor = "";
@@ -82,67 +85,6 @@ angular.module("angular-google-maps-example", ['uiGmapgoogle-maps', 'ngFileUploa
         }
       }
     };
-    
-    $scope.markersEvents = {
-		    click: function (gMarker, eventName, model) {
-		    	gMarker.showWindow = true;
-		    	model.doShow = true;
-		      if(model.$id){
-		        model = model.coords;//use scope portion then
-		      }
-		     alert("Model: event:" + eventName + " " + JSON.stringify(model));
-		     var json = eval( "(" + JSON.stringify(model) + ")" );
-		     var string_valores = json.key;
-		     console.log("JSON.stringify(model)) =  " + JSON.stringify(model));
-		     console.log("json.key =  " + json.key);
-		     var res = string_valores.split(",");
-		     $scope.title = res[1];
-		     $scope.data = res[2];
-		     console.log("$scope.data == " + $scope.data);
-		     $scope.idDenuncia = res[0];
-			     switch(res[1]){
-					case "Nao foi Definido": {
-						$scope.cor = "#CCFF90";
-					}break;
-					case "Drogas":{
-						$scope.cor = "#B3E5FC";
-					}break;
-					case "Assalto": {
-						$scope.cor = "#F8BBD0";
-					}break;
-					case "Alcool": {
-						$scope.cor = "#E1BEE7";
-					}break;
-					case "Assassinato": {
-						$scope.cor = "#B2DFDB";
-					}break;
-					case "Acidente de Transito": {
-						$scope.cor = "#FFFF8D";
-					}break;
-					case "Buraco na Rua": {
-						$scope.cor = "#FFE57F";
-					}break;
-					case "Desaparecimento de Pessoa": {
-						$scope.cor = "#FFD180";
-					}break;
-					case "Luz de Poste Desligada": {
-						$scope.cor = "#EEEEEE";
-					}break;
-					case "Roubo de Automovel": {
-						$scope.cor = "#CFD8DC";
-					}break;
-					case "Roubo de Celular": {
-						$scope.cor = "#D7CCC8";
-					}break;
-					case "Excesso de Barulho": {
-						$scope.cor = "#FFCCBC";
-					}break;
-					default : {
-						$scope.cor = "#A7FFEB";
-					}break;
-				}
-		    }
-		  };
 
     var millisecondsToWait = 50;
 	setTimeout(function() {
@@ -210,10 +152,75 @@ angular.module("angular-google-maps-example", ['uiGmapgoogle-maps', 'ngFileUploa
         $scope.searchResults = {
           results: markers
         };
-        
 	}, millisecondsToWait);
 	
+	$scope.markersEvents = {
+		    click: function (gMarker, eventName, model) {
+		    	gMarker.showWindow = true;
+		    	model.doShow = true;
+		      if(model.$id){
+		        model = model.coords;//use scope portion then
+		      }
+		     //alert("Model: event:" + eventName + " " + JSON.stringify(model));
+		     var json = eval( "(" + JSON.stringify(model) + ")" );
+		     var string_valores = json.key;
+		     console.log("JSON.stringify(model)) =  " + JSON.stringify(model));
+		     console.log("json.key =  " + json.key);
+		     var res = string_valores.split(",");
+		     $scope.title = res[1];
+		     $scope.data = res[2];
+		     console.log("$scope.data == " + $scope.data);
+		     $scope.idDenuncia = res[0];
+			     switch(res[1]){
+					case "Nao foi Definido": {
+						$scope.cor = "#CCFF90";
+					}break;
+					case "Drogas":{
+						$scope.cor = "#B3E5FC";
+					}break;
+					case "Assalto": {
+						$scope.cor = "#F8BBD0";
+					}break;
+					case "Alcool": {
+						$scope.cor = "#E1BEE7";
+					}break;
+					case "Assassinato": {
+						$scope.cor = "#B2DFDB";
+					}break;
+					case "Acidente de Transito": {
+						$scope.cor = "#FFFF8D";
+					}break;
+					case "Buraco na Rua": {
+						$scope.cor = "#FFE57F";
+					}break;
+					case "Desaparecimento de Pessoa": {
+						$scope.cor = "#FFD180";
+					}break;
+					case "Luz de Poste Desligada": {
+						$scope.cor = "#EEEEEE";
+					}break;
+					case "Roubo de Automovel": {
+						$scope.cor = "#CFD8DC";
+					}break;
+					case "Roubo de Celular": {
+						$scope.cor = "#D7CCC8";
+					}break;
+					case "Excesso de Barulho": {
+						$scope.cor = "#FFCCBC";
+					}break;
+					default : {
+						$scope.cor = "#A7FFEB";
+					}break;
+				}
+		    }
+		  };
+  
 	
+
+      var onClickedFunction = function () {
+        onMarkerClicked(marker);
+      };
+      
       $scope.denuncias = [];
       
       var millisecondsToWait_lista = 2000;
@@ -222,7 +229,54 @@ angular.module("angular-google-maps-example", ['uiGmapgoogle-maps', 'ngFileUploa
 				function(data) {
 					$scope.denuncias = data;
 				});
-  	}, millisecondsToWait_lista);      
+  	}, millisecondsToWait_lista);
+  	
+  	var markerToClose = null;
+
+    $scope.onMarkerClicked = function (marker) {
+//      if (markerToClose) {
+//        markerToClose.showWindow = false;
+//      }
+      markerToClose = marker; // for next go around
+      marker.showWindow = true;
+      $scope.$apply();
+      //window.alert("Marker: lat: " + marker.latitude + ", lon: " + marker.longitude + " clicked!!")
+    };
+
+    $scope.onInsideWindowClick = function () {
+      alert("Window hit!");
+    };
+
+    $timeout(function () {
+      var dynamicMarkers = [
+        {   id: 1,
+          latitude: 46,
+          longitude: -79
+        },
+        {
+          id: 2,
+          latitude: 33,
+          longitude: -79
+        },
+        {
+          id: 3,
+          icon: 'assets/images/plane.png',
+          latitude: 35,
+          longitude: -127
+        }
+      ];
+      _.each(dynamicMarkers, function (marker) {
+        marker.closeClick = function () {
+          marker.showWindow = false;
+          $scope.$apply();
+        };
+        marker.onClicked = function () {
+          $scope.onMarkerClicked(marker);
+        };
+      });
+      $scope.map.dynamicMarkers = dynamicMarkers;
+    }, 2000);
+      
   }
 
 ])
