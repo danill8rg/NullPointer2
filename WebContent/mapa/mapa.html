@@ -112,7 +112,13 @@
 		
 		<ui-gmap-markers models="searchResults.results" coords="'coords'"  idkey="'key'"  fit='true'   icon="'icon'" events="markersEvents">
                 <ui-gmap-windows show="'showWindow'" closeClick="'closeClick'" ng-cloak>
-                    <p ng-non-bindable>This is an info window at {{ latitude | number:4 }}, {{ longitude | number:4 }}!</p>
+                	<div style="background-color: {{cor}} !important; w" >
+                		<p style="color: #000000; font-weight: bold">Tipo da Denúncia : {{title}}</p>
+                		
+                		<p  style="color: #000000; font-weight: bold" >Data que Aconteceu : {{data}}</p>
+                		
+                		<p class="text-center"><a href="/conexaocidada/#/denuncia/detalhe/{{idDenuncia}}">Detalhe Denúncia </a></p>
+                	</div>
                 </ui-gmap-windows>
             </ui-gmap-markers>
       </ui-gmap-google-map>
@@ -122,7 +128,7 @@
 <div id="about"  class="container spacer about">	
 	<div class="list-group">
 	  <a href="#" class="list-group-item active">
-	    <h4 class="list-group-item-heading text-center">Ultimas Denúncias Adicionadas</h4>
+	    <h4  >Ultimas Denúncias Adicionadas</h4>
 	  </a>
 	  <a ng-repeat="denuncia in denuncias"  href="/conexaocidada/#/denuncia/detalhe/{{denuncia.idDenuncia}}" class="list-group-item">
 	     <div class="row">

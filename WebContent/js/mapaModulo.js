@@ -90,7 +90,7 @@ angular.module("angular-google-maps-example", ['uiGmapgoogle-maps', 'ngFileUploa
 		      if(model.$id){
 		        model = model.coords;//use scope portion then
 		      }
-		     alert("Model: event:" + eventName + " " + JSON.stringify(model));
+		     //alert("Model: event:" + eventName + " " + JSON.stringify(model));
 		     var json = eval( "(" + JSON.stringify(model) + ")" );
 		     var string_valores = json.key;
 		     console.log("JSON.stringify(model)) =  " + JSON.stringify(model));

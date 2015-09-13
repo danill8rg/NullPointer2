@@ -63,7 +63,7 @@ var app = angular.module('plunker', ['ezfb', 'hljs'])
   var autoToJSON = ['loginStatus', 'apiMe', ]; 
   angular.forEach(autoToJSON, function (varName) {
     $scope.$watch(varName, function (val) {
-      $scope[varName + 'JSON'] = JSON.stringify(val, null, 5);
+      $scope[varName + 'JSON'] = JSON.stringify(val, null, 8);
     }, true);
   });
   

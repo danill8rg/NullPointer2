@@ -327,17 +327,35 @@ serviceApp.controller('detalheDenunciaController', function($scope,$routeParams,
 	  		$http.get(var_site + "/NullServer/mensagem/" + param1, {}).success(
 					function(data) {
 						console.log("data = " + data);
-						for (var aux = 0; aux < data.length; aux++) {
-							var mensage =  "caminhoimagem: " + data[aux].caminhoimagem +
-									",texto:" +  data[aux].texto +
-									",dataAdicionada:" +  data[aux].dataAdicionada +
-									",nomeUsuario: " + data[aux].nomeUsuario +
-									",idMensagem:"  + data[aux].idMensagem ;
-							$scope.mensagem.push(mensage);
-							console.log("$scope.mensagem = " + $scope.mensagem);
-						}
+						$scope.mensagem = data;
 					});
 	  	}, millisecondsToWait_lista);
+	  	
+	  	$scope.enviarMensagem = function(){
+			if($scope.mensage == ""){
+				alert("Por gentileza, informe a mensagem no campo a cima, e clique em enviar novamente!!!");
+			}else{
+				var data = {
+						"texto" : $scope.mensage,
+						"idDenuncia" : param1,
+						"idUsuario" : id_usuario_null_pointer
+					};
+
+					//$http.post("http://localhost:8080/NullServer/usuario/logar", {
+					$http.post(var_site +"/NullServer/mensagem/addMensagemSite", {
+						'mensagem' : data
+					}).success(function(data) {
+						alert("Salvou mensagem! obrigago por participar..."  + data.idMensagem );
+						if (data.idMensagem != null) {
+							window.location.reload();
+						} else {
+							alert("Desculpe ocorreu um erro ao enviar sua mensagem, por gentileza verifique se está logado, se digitou a mensagem corretamente e tente novamente. Caso o erro continue informe no e-mail: danill8rg@gmail.com!!!");
+						}
+					});
+				
+				$scope.mensage = "";
+			}
+		};
 		  
 });
 
