@@ -20,14 +20,40 @@ var app = angular.module('plunker', ['ezfb', 'hljs'])
      * Calling FB.login with required permissions specified
      * https://developers.facebook.com/docs/reference/javascript/FB.login/v2.0
      */
-    ezfb.login(function (res) {
-      /**
-       * no manual $scope.$apply, I got that handled
-       */
-      if (res.authResponse) {
-        updateLoginStatus(updateApiMe);
-      }
-    }, {scope: 'email,user_likes'});
+	  $scope.login = function() {
+			ezfb.login(function(res) {
+				if(res.authResponse){
+					console.log(res);
+					
+					ezfb.api('/me', function(res) {
+						console.log("teset2res = " + JSON.stringify(res));
+						console.log("res = " + JSON.stringify(res));
+						console.log("res.name =" + res.name);
+						console.log("res.id =" + res.id);
+						
+						var data = '{ "nome" : ' + res.name    +
+									', "senha" : '  + res.id +
+									', "email" : ' + res.name  + '}';
+						
+						console.log("data =" + data);
+							//$http.post("http://localhost:8080/NullServer/usuario/logarFace", data
+							$http.post(var_site + "/NullServer/usuario/logarFace", data
+							).success(function(data) {
+								if (data.idUsuario != null) {
+									window.sessionStorage.setItem("idUsuario", data.idUsuario);
+									id_usuario_null_pointer = data.idUsuario;
+									window.location.reload();
+									$window.location.href = '#/minhasDenuncias';
+								} else {
+									openMensagem();
+								}
+							});
+					});
+				}
+			}, {
+				scope : 'public_profile,email'
+			});
+		};
   };
 
   $scope.logout = function () {

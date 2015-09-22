@@ -1,9 +1,9 @@
 // 0 = desconectado;
 var id_usuario_null_pointer = 0;
 
-//var var_site = "http://rcisistemas.minivps.info:8080";
+var var_site = "http://rcisistemas.minivps.info:8080";
 
-var var_site = "http://localhost:8080";
+//var var_site = "http://localhost:8080";
 
 var serviceApp = angular.module('nullP', [ 'ngRoute', 'googlechart', 'ezfb','hljs',  'ui.bootstrap' ]);
 
@@ -39,6 +39,9 @@ serviceApp.config([ '$routeProvider', 'ezfbProvider',
 			}).when('/log', {
 				templateUrl : 'usuario/login.html',
 				controller : 'controller_login'
+			}).when('/contato', {
+				templateUrl : 'usuario/contato.html',
+				controller : 'controller_contato'
 			}).when('/log/:param1', {
 				templateUrl : 'usuario/login.html',
 				controller : 'controller_login'
@@ -540,30 +543,34 @@ serviceApp.controller('controller_login', function($scope, usuarioService,
 		ezfb.login(function(res) {
 			if(res.authResponse){
 				console.log(res);
-				console.log(res.authResponse.userID);
-				console.log("res.name =" + res.authResponse.userID);
-				console.log("res.id =" + res.authResponse.userID);
 				
-				var data = '{ "nome" : ' + res.authResponse.userID    +
-							', "senha" : '  + res.authResponse.userID +
-							', "email" : ' + res.authResponse.userID  + '}';
-				
-				console.log("data =" + data);
-					//$http.post("http://localhost:8080/NullServer/usuario/logarFace", data
-					$http.post(var_site + "/NullServer/usuario/logarFace", data
-					).success(function(data) {
-						if (data.idUsuario != null) {
-							window.sessionStorage.setItem("idUsuario", data.idUsuario);
-							id_usuario_null_pointer = data.idUsuario;
-							window.location.reload();
-							$window.location.href = '#/minhasDenuncias';
-						} else {
-							openMensagem();
-						}
-					});
+				ezfb.api('/me', function(res) {
+					console.log("teset2res = " + JSON.stringify(res));
+					console.log("res = " + JSON.stringify(res));
+					console.log("res.name =" + res.name);
+					console.log("res.id =" + res.id);
+					
+					var data = '{ "nome" : ' + res.name    +
+								', "senha" : '  + res.id +
+								', "email" : ' + res.name  + '}';
+					
+					console.log("data =" + data);
+						//$http.post("http://localhost:8080/NullServer/usuario/logarFace", data
+						$http.post(var_site + "/NullServer/usuario/logarFace", data
+						).success(function(data) {
+							if (data.idUsuario != null) {
+								window.sessionStorage.setItem("idUsuario", data.idUsuario);
+								id_usuario_null_pointer = data.idUsuario;
+								window.location.reload();
+								$window.location.href = '#/minhasDenuncias';
+							} else {
+								openMensagem();
+							}
+						});
+				});
 			}
 		}, {
-			scope : 'email,user_likes'
+			scope : 'public_profile,email'
 		});
 	};
 
@@ -651,30 +658,34 @@ serviceApp.controller('controller_create', function($scope, usuarioService,
 		ezfb.login(function(res) {
 			if(res.authResponse){
 				console.log(res);
-				console.log(res.authResponse.userID);
-				console.log("res.name =" + res.authResponse.userID);
-				console.log("res.id =" + res.authResponse.userID);
 				
-				var data = '{ "nome" : ' + res.authResponse.userID    +
-							', "senha" : '  + res.authResponse.userID +
-							', "email" : ' + res.authResponse.userID  + '}';
-				
-				console.log("data =" + data);
-					//$http.post("http://localhost:8080/NullServer/usuario/logarFace", data
-					$http.post(var_site + "/NullServer/usuario/logarFace", data
-					).success(function(data) {
-						if (data.idUsuario != null) {
-							window.sessionStorage.setItem("idUsuario", data.idUsuario);
-							id_usuario_null_pointer = data.idUsuario;
-							window.location.reload();
-							$window.location.href = '#/minhasDenuncias';
-						} else {
-							openMensagem();
-						}
-					});
+				ezfb.api('/me', function(res) {
+					console.log("teset2res = " + JSON.stringify(res));
+					console.log("res = " + JSON.stringify(res));
+					console.log("res.name =" + res.name);
+					console.log("res.id =" + res.id);
+					
+					var data = '{ "nome" : ' + res.name    +
+								', "senha" : '  + res.id +
+								', "email" : ' + res.name  + '}';
+					
+					console.log("data =" + data);
+						//$http.post("http://localhost:8080/NullServer/usuario/logarFace", data
+						$http.post(var_site + "/NullServer/usuario/logarFace", data
+						).success(function(data) {
+							if (data.idUsuario != null) {
+								window.sessionStorage.setItem("idUsuario", data.idUsuario);
+								id_usuario_null_pointer = data.idUsuario;
+								window.location.reload();
+								$window.location.href = '#/minhasDenuncias';
+							} else {
+								openMensagem();
+							}
+						});
+				});
 			}
 		}, {
-			scope : 'email,user_likes'
+			scope : 'public_profile,email'
 		});
 	};
 
@@ -779,4 +790,44 @@ serviceApp.controller('controller_senha', function($scope, usuarioService,
 				});
 	};
 
+});
+
+serviceApp.controller('controller_contato', function($scope, $http, $routeParams) {
+	$scope.init = function() {
+		if (window.sessionStorage.getItem('idUsuario') != null) {
+			id_usuario_null_pointer = window.sessionStorage.getItem('idUsuario');
+			$scope.logStatus = "Sair";
+		} else {
+			$scope.logStatus = "Logar";
+			id_usuario_null_pointer = 0;
+		}
+	}
+	$scope.init();
+	
+	alert("Por gentileza, informe a mensagem no campo a cima, e clique em enviar novamente!!!");
+		
+	$scope.enviarMensagem = function(){
+		alert("Por gentileza, informe a mensagem no campo a cima, e clique em enviar novamente!!!");
+		if($scope.mensage == ""){
+			alert("Por gentileza, informe a mensagem no campo a cima, e clique em enviar novamente!!!");
+		}else{
+			var data = {
+					"texto" : $scope.mensage,
+					"nome" : $scope.nome,
+					"email" : $scope.email
+				};
+
+				$http.post("http://localhost:8080/NullServer/mensagem/addcontato", {
+				//$http.post(var_site +"/NullServer/mensagem/addMensagemSite", {
+					'mensagem' : data
+				}).success(function(data) {
+					alert("Sua mensagem foi enviada! obrigado por sua mensagem. Assim que possível estaremos verificando sua mensagem e lhe enviando uma resposta." );
+					$scope.mensage = "";
+					$scope.nome = "";
+					$scope.email = "";
+				});
+			
+			$scope.mensage = "";
+		}
+	};	
 });

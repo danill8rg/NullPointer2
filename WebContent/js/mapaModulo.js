@@ -1,6 +1,6 @@
-//var var_site2 = "http://rcisistemas.minivps.info:8080";
+var var_site2 = "http://rcisistemas.minivps.info:8080";
 
-var var_site2 = "http://localhost:8080";
+//var var_site2 = "http://localhost:8080";
 
 //0 = desconectado;
 var id_usuario_null_pointer = 0;
@@ -438,9 +438,9 @@ angular.module("angular-google-maps-example", ['uiGmapgoogle-maps', 'ngFileUploa
             	 $http.post(var_site2 + "/NullServer/denuncia/denuncia_site", {denuncia : data}).success(	
             	 function(data) {
             		 		if(data.idDenuncia == null){
-            		 			$window.location.href = '/conexaocidada/#/denuncia/detalhe/' + data.idDenuncia;
+            		 			$window.location.href = '/NullPointer/#/denuncia/detalhe/' + data.idDenuncia;
             		 		}else{
-            		 			$window.location.href = '/conexaocidada/mapa/mapa.html';
+            		 			$window.location.href = '/NullPointer/mapa/mapa.html';
             		 		}
  						}).error(function(data){
  							console.log("Erro ao salvar Denuncia");
